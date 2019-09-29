@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/asche910/SocketsProxy/relay"
 	"log"
 	"net"
-	"socketstest/relay"
 	"strconv"
 )
 
