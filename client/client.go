@@ -29,7 +29,7 @@ func main() {
 
 // 本地中转	---> 连接远程 & 服务本地
 func handle(client net.Conn) {
-	server, err := net.Dial("tcp", "http://home.asche.top:8088")
+	server, err := net.Dial("udp", ":53")
 	if err != nil {
 		log.Println("Connect remote failed!")
 		return

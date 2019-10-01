@@ -11,10 +11,14 @@ import (
 func main() {
 	fmt.Println("Server start: ")
 
-	ln, err := net.Listen("tcp", ":8088")
+	port := "53"
+
+	ln, err := net.Listen("udp", ":" + port)
 	if err != nil {
 		fmt.Println("Server error!")
 	}
+	fmt.Println("Server listen in " + port)
+
 	for {
 		log.Println("Waiting...")
 		client, err := ln.Accept()
