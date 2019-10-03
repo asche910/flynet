@@ -51,7 +51,7 @@ func handleClient(client net.Conn) {
 	// client的代理只起到转发作用
 	// 这样握手转到了本地进行
 	if b[0] == 0x05 {
-		// 服务器相应连接成功
+		// 服务器响应连接成功
 		_, _ = client.Write(relay.Increase([]byte{0x05, 0x00}))
 		// 服务器读取客户端的实际访问请求(如google...)
 		n, err = client.Read(b[:])
