@@ -100,3 +100,15 @@
 2019/10/10 21:43:07 socks5.go:199: Request remote hm.baidu.com:443
 2019/10/10 21:43:13 relay.go:24: EOF
 2019/10/10 21:43:13 relay.go:24: EOF
+2019/10/10 22:45:01 net_utils.go:14: Client listen tcp at: 7777
+2019/10/10 22:45:01 net_utils.go:14: Client listen tcp at: 8888
+2019/10/10 22:48:09 portforward.go:18: Dial to localhost:1080 success!
+2019/10/10 22:48:09 portforward.go:28: Dial to :7777 success!
+2019/10/10 23:00:51 net_utils.go:14: Client listen tcp at: 7777
+2019/10/10 23:00:51 net_utils.go:14: Client listen tcp at: 8888
+2019/10/10 23:01:06 portforward.go:18: Dial to localhost:1080 success!
+2019/10/10 23:01:06 portforward.go:28: Dial to :7777 success!
+2019/10/10 23:04:03 net_utils.go:14: Client listen tcp at: 7777
+2019/10/10 23:04:03 net_utils.go:14: Client listen tcp at: 8888
+2019/10/10 23:04:07 portforward.go:18: Dial to localhost:1080 success!
+2019/10/10 23:04:07 portforward.go:28: Dial to :7777 success!

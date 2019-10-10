@@ -13,7 +13,8 @@ func main() {
 	log.EnableLog(true)
 	initLog()
 
-	util.Socks5ForClientByUDP("8848", "127.0.0.1:8888")
+	//util.Socks5ForClientByUDP("8848", "127.0.0.1:8888")
+	util.PortForwardForClient("1080", ":7777")
 }
 
 func initLog()  {

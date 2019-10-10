@@ -13,7 +13,8 @@ func main() {
 	log.EnableLog(true)
 	initLog()
 
-	util.Socks5ForServerByUDP("8888")
+	//util.Socks5ForServerByUDP("8888")
+	util.PortForwardForServer("7777", "8888")
 }
 
 func initLog()  {
