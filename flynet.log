@@ -7,3 +7,96 @@
 2019/10/10 12:29:15 test.go:15: Hello, world!
 2019/10/10 13:07:07 errorutils.go:13: hhhhh <nil>
 2019/10/10 13:09:01 errorutils.go:12: hhhhh <nil>
+2019/10/10 21:39:24 net_utils.go:14: Client listen tcp at: 8848
+2019/10/10 21:39:31 socks5.go:149: Client accepted!
+2019/10/10 21:39:31 socks5.go:199: Request remote lp-push-server-543.lastpass.com:443
+2019/10/10 21:39:47 socks5.go:149: Client accepted!
+2019/10/10 21:39:47 socks5.go:199: Request remote www.zhihu.com:443
+2019/10/10 21:39:48 socks5.go:149: Client accepted!
+2019/10/10 21:39:48 socks5.go:199: Request remote zhihu-web-analytics.zhihu.com:443
+2019/10/10 21:39:51 socks5.go:149: Client accepted!
+2019/10/10 21:39:51 socks5.go:199: Request remote static.zhihu.com:443
+2019/10/10 21:39:51 socks5.go:149: Client accepted!
+2019/10/10 21:39:51 socks5.go:199: Request remote hm.baidu.com:443
+2019/10/10 21:39:52 socks5.go:149: Client accepted!
+2019/10/10 21:39:52 socks5.go:199: Request remote unpkg.zhimg.com:443
+2019/10/10 21:39:52 socks5.go:149: Client accepted!
+2019/10/10 21:39:52 socks5.go:149: Client accepted!
+2019/10/10 21:39:52 socks5.go:199: Request remote pic4.zhimg.com:443
+2019/10/10 21:39:52 socks5.go:199: Request remote pic1.zhimg.com:443
+2019/10/10 21:39:52 socks5.go:149: Client accepted!
+2019/10/10 21:39:52 socks5.go:199: Request remote unpkg.zhimg.com:443
+2019/10/10 21:39:52 socks5.go:149: Client accepted!
+2019/10/10 21:39:53 socks5.go:199: Request remote mqtt-web.zhihu.com:443
+2019/10/10 21:39:53 socks5.go:149: Client accepted!
+2019/10/10 21:39:53 socks5.go:199: Request remote hm.baidu.com:443
+2019/10/10 21:39:58 socks5.go:149: Client accepted!
+2019/10/10 21:39:58 socks5.go:199: Request remote pic3.zhimg.com:443
+2019/10/10 21:39:59 socks5.go:149: Client accepted!
+2019/10/10 21:39:59 socks5.go:199: Request remote mqtt-web.zhihu.com:443
+2019/10/10 21:39:59 socks5.go:149: Client accepted!
+2019/10/10 21:39:59 socks5.go:149: Client accepted!
+2019/10/10 21:39:59 socks5.go:199: Request remote pic2.zhimg.com:443
+2019/10/10 21:39:59 socks5.go:199: Request remote pay.zhihu.com:443
+2019/10/10 21:40:00 relay.go:24: EOF
+2019/10/10 21:40:00 relay.go:24: EOF
+2019/10/10 21:40:02 socks5.go:149: Client accepted!
+2019/10/10 21:40:09 relay.go:24: EOF
+2019/10/10 21:40:16 relay.go:24: EOF
+2019/10/10 21:40:16 relay.go:24: EOF
+2019/10/10 21:40:23 socks5.go:199: Request remote clients4.google.com:443
+2019/10/10 21:40:23 socks5.go:202: Dial failed!
+2019/10/10 21:40:23 error_utils.go:18: Dial remote failed! dial tcp 172.217.27.142:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/10 21:40:25 relay.go:24: EOF
+2019/10/10 21:40:25 relay.go:24: EOF
+2019/10/10 21:40:25 socks5.go:149: Client accepted!
+2019/10/10 21:40:25 socks5.go:199: Request remote www.zhihu.com:443
+2019/10/10 21:40:32 relay.go:24: EOF
+2019/10/10 21:40:35 relay.go:24: EOF
+2019/10/10 21:40:35 socks5.go:149: Client accepted!
+2019/10/10 21:40:35 relay.go:24: EOF
+2019/10/10 21:40:35 relay.go:47: write tcp [::1]:8848->[::1]:59682: wsasend: An established connection was aborted by the software in your host machine.
+2019/10/10 21:40:35 socks5.go:199: Request remote hm.baidu.com:443
+2019/10/10 21:40:45 relay.go:24: EOF
+2019/10/10 21:40:53 relay.go:24: EOF
+2019/10/10 21:41:10 socks5.go:149: Client accepted!
+2019/10/10 21:41:10 socks5.go:199: Request remote mtalk.google.com:443
+2019/10/10 21:41:17 relay.go:24: EOF
+2019/10/10 21:41:17 socks5.go:149: Client accepted!
+2019/10/10 21:41:33 socks5.go:149: Client accepted!
+2019/10/10 21:41:34 socks5.go:199: Request remote pollserver.lastpass.com:443
+2019/10/10 21:41:38 socks5.go:199: Request remote clients4.google.com:443
+2019/10/10 21:41:38 socks5.go:202: Dial failed!
+2019/10/10 21:41:38 error_utils.go:18: Dial remote failed! dial tcp 172.217.27.142:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/10 21:41:47 relay.go:24: EOF
+2019/10/10 21:41:58 relay.go:24: EOF
+2019/10/10 21:41:58 relay.go:24: EOF
+2019/10/10 21:41:58 relay.go:24: EOF
+2019/10/10 21:41:58 relay.go:24: EOF
+2019/10/10 21:41:59 relay.go:24: EOF
+2019/10/10 21:41:59 relay.go:24: EOF
+2019/10/10 21:42:00 relay.go:24: EOF
+2019/10/10 21:42:00 relay.go:24: EOF
+2019/10/10 21:42:14 relay.go:24: EOF
+2019/10/10 21:42:14 relay.go:24: EOF
+2019/10/10 21:42:25 relay.go:24: EOF
+2019/10/10 21:42:25 relay.go:24: EOF
+2019/10/10 21:43:00 relay.go:24: EOF
+2019/10/10 21:43:00 relay.go:24: EOF
+2019/10/10 21:43:06 socks5.go:149: Client accepted!
+2019/10/10 21:43:06 socks5.go:199: Request remote static.zhihu.com:443
+2019/10/10 21:43:06 socks5.go:149: Client accepted!
+2019/10/10 21:43:06 relay.go:24: EOF
+2019/10/10 21:43:06 socks5.go:149: Client accepted!
+2019/10/10 21:43:06 relay.go:24: EOF
+2019/10/10 21:43:06 relay.go:47: write tcp [::1]:8848->[::1]:59676: wsasend: An established connection was aborted by the software in your host machine.
+2019/10/10 21:43:06 socks5.go:199: Request remote hm.baidu.com:443
+2019/10/10 21:43:06 socks5.go:199: Request remote unpkg.zhimg.com:443
+2019/10/10 21:43:07 socks5.go:149: Client accepted!
+2019/10/10 21:43:07 socks5.go:199: Request remote unpkg.zhimg.com:443
+2019/10/10 21:43:07 socks5.go:149: Client accepted!
+2019/10/10 21:43:07 socks5.go:199: Request remote mqtt-web.zhihu.com:443
+2019/10/10 21:43:07 socks5.go:149: Client accepted!
+2019/10/10 21:43:07 socks5.go:199: Request remote hm.baidu.com:443
+2019/10/10 21:43:13 relay.go:24: EOF
+2019/10/10 21:43:13 relay.go:24: EOF

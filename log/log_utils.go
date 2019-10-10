@@ -1,4 +1,4 @@
-package util
+package log
 
 import (
 	"io"
@@ -8,20 +8,19 @@ import (
 
 var (
 	logFlag   = false
-	debugFlag = false
-	logger *log.Logger
+	debugFlag = true
+	logger    *log.Logger
 )
 
-func init(){
-	// init logger avoid for not call GetLogger() function
-	logger = log.New(os.Stdout, "", log.Ldate|log.Ltime|log.Lshortfile)
+func InitLog()  {
+	logger = GetLogger()
 }
 
-func SetEnableLog(flag bool) {
+func EnableLog(flag bool) {
 	logFlag = flag
 }
 
-func SetEnableDebug(flag bool) {
+func EnableDebug(flag bool) {
 	debugFlag = flag
 }
 

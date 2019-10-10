@@ -2,7 +2,15 @@ package util
 
 import (
 	"fmt"
+	log2 "github.com/asche910/flynet/log"
+	"log"
 )
+
+var logger *log.Logger
+
+func InitLog()  {
+	logger = log2.GetLogger()
+}
 
 // just check error and print if err is not nil
 func CheckError(err error, info string) {
@@ -14,7 +22,7 @@ func CheckError(err error, info string) {
 // check error and exit if err is not nil
 func CheckErrorOrExit(err error, info string) {
 	if err != nil {
-		logger.Fatalln(info, err)
+		logger.Panicln(info, err)
 	}
 }
 

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/asche910/flynet/util"
 	"net"
 )
 
@@ -14,6 +15,10 @@ type FlyServer struct {
 
 }
 
-func (server *FlyServer) localSocks5() {
+func (server *FlyServer) LocalSocks5Proxy(port string) {
+	util.StartSocks5(port)
+}
 
+func (server *FlyServer)LocalHttpProxy(port string)  {
+	util.StartHttp(port)
 }

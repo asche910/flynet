@@ -2,21 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7f71bfd3-ba43-4ca3-9c26-0119a44c2810" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/client/flyclient.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/flyserver.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/util/errorutils.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/util/http.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/util/logutils.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/util/socks5.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/socketsproxy.iml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/util/net_utils.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/client-main/client.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/server-main/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-main/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/client/client.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flynet.log" beforeDir="false" afterPath="$PROJECT_DIR$/flynet.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relay/securetcp.go" beforeDir="false" afterPath="$PROJECT_DIR$/relay/relay.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server-main/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/server/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/flyserver.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/flyserver.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/errorutils.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/error_utils.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/http.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/http.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/logutils.go" beforeDir="false" afterPath="$PROJECT_DIR$/log/log_utils.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/socks5.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/socks5.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -46,6 +43,9 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Asche\go\src\github.com\asche910\flynet\log" />
+      <recent name="C:\Users\Asche\go\src\github.com\asche910\flynet\cmd\client" />
+      <recent name="C:\Users\Asche\go\src\github.com\asche910\flynet\cmd\server" />
       <recent name="C:\Users\Asche\go\src\github.com\asche910\flynet\util" />
     </key>
   </component>
@@ -61,7 +61,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Go Build.go build github.com/asche910/flynet">
+  <component name="RunManager" selected="Go Build.go build github.com/asche910/flynet/cmd/client">
     <configuration name="go build github.com/asche910/flynet" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="flynet" />
       <working_directory value="$PROJECT_DIR$/" />
@@ -77,6 +77,24 @@
       <kind value="PACKAGE" />
       <filePath value="$PROJECT_DIR$/client-main/client.go" />
       <package value="github.com/asche910/flynet/client-main" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build github.com/asche910/flynet/cmd/client" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="flynet" />
+      <working_directory value="$PROJECT_DIR$/" />
+      <kind value="PACKAGE" />
+      <filePath value="$PROJECT_DIR$/cmd/client/client.go" />
+      <package value="github.com/asche910/flynet/cmd/client" />
+      <directory value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build github.com/asche910/flynet/cmd/server" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="flynet" />
+      <working_directory value="$PROJECT_DIR$/" />
+      <kind value="PACKAGE" />
+      <filePath value="$PROJECT_DIR$/cmd/server/server.go" />
+      <package value="github.com/asche910/flynet/cmd/server" />
+      <directory value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
     <configuration name="go build github.com/asche910/flynet/server-main" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
@@ -101,9 +119,13 @@
       <item itemvalue="Go Build.go build github.com/asche910/flynet/client-main" />
       <item itemvalue="Go Build.go build github.com/asche910/flynet/server-main" />
       <item itemvalue="Go Build.go build github.com/asche910/flynet" />
+      <item itemvalue="Go Build.go build github.com/asche910/flynet/cmd/server" />
+      <item itemvalue="Go Build.go build github.com/asche910/flynet/cmd/client" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Build.go build github.com/asche910/flynet/cmd/client" />
+        <item itemvalue="Go Build.go build github.com/asche910/flynet/cmd/server" />
         <item itemvalue="Go Build.go build github.com/asche910/flynet" />
         <item itemvalue="Go Build.go build github.com/asche910/flynet/client-main" />
         <item itemvalue="Go Build.go build github.com/asche910/flynet/server-main" />
