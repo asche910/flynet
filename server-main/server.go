@@ -2,14 +2,19 @@ package main
 
 import (
 	"fmt"
-	"github.com/asche910/SocketsProxy/relay"
-	"log"
+	"github.com/asche910/flynet/relay"
+	"github.com/asche910/flynet/util"
 	"net"
 	"strconv"
 )
 
+var(
+	logger = util.GetLogger()
+)
+
 func main() {
 	fmt.Println("Server start: ")
+
 
 	port := "8088"
 
@@ -17,10 +22,10 @@ func main() {
 	if err != nil {
 		fmt.Println("Server error!")
 	}
-	fmt.Println("Server listen in " + port)
+	fmt.Println("Server listen at " + port)
 
 	for {
-		log.Println("Waiting...")
+		logger.Println("Waiting...")
 		client, err := ln.Accept()
 		if err != nil {
 			fmt.Println("server listener error:", err )
@@ -32,23 +37,23 @@ func main() {
 
 func handleClient(client net.Conn) {
 	if client == nil {
-		log.Println("Client is nil!")
+		logger.Println("Client is nil!")
 	}
-	log.Println("Connect success!")
+	logger.Println("Connect success!")
 
 	// 请求建立socks连接
 	var b [1024] byte
 	n, err := client.Read(b[:])
 	if err != nil {
-		log.Println("Read error!")
+		logger.Println("Read error!")
 		return
 	}
 
-	log.Println(b[:])
+	logger.Println(b[:])
 
 	relay.Decrease(b[:])
 
-	log.Println(b[:])
+	logger.Println(b[:])
 
 	// asocks5 握手连接也经过加密
 	// client的socks5握手报文由本地浏览器发送
@@ -77,7 +82,7 @@ func handleClient(client net.Conn) {
 		// 服务器向目标网站发起请求
 		server, err := net.Dial("tcp", net.JoinHostPort(host, port))
 		if err != nil {
-			log.Println("Dial failed!")
+			logger.Println("Dial failed!")
 			return
 		}
 		// defer server.Close()

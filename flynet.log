@@ -1,0 +1,9 @@
+2019/10/10 12:07:12 test.go:13: Hello, world!
+2019/10/10 12:08:20 test.go:13: Hello, world!
+2019/10/10 12:08:26 test.go:13: Hello, world!
+2019/10/10 12:08:27 test.go:13: Hello, world!
+2019/10/10 12:13:23 test.go:15: Hello, world!
+2019/10/10 12:28:59 test.go:15: Hello, world!
+2019/10/10 12:29:15 test.go:15: Hello, world!
+2019/10/10 13:07:07 errorutils.go:13: hhhhh <nil>
+2019/10/10 13:09:01 errorutils.go:12: hhhhh <nil>

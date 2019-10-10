@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0d680a6e-91ac-4f0e-a675-7dc894da6865" name="Default Changelist" comment="">
+    <list default="true" id="7f71bfd3-ba43-4ca3-9c26-0119a44c2810" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/client/flyclient.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/flyserver.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/util/errorutils.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/util/http.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/util/logutils.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/util/socks5.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/socketsproxy.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/client/client.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/client-main/client.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/server-main/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/test.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,27 +35,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1RVcXRMboTJTwpux6ElmDLwJq3h" />
+  <component name="ProjectId" id="1Ry1wTMpyH8wQz23UFttaiXC3qX" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="configurable.Global.GOPATH.is.expanded" value="true" />
-    <property name="configurable.Module.GOPATH.is.expanded" value="false" />
-    <property name="configurable.Project.GOPATH.is.expanded" value="true" />
-    <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="go.sdk.automatically.set" value="true" />
-    <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../goproxy" />
-    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
-    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="go.vgo" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/server-main/server.go" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Asche\go\src\socketstest\server" />
-      <recent name="C:\Users\Asche\go\src\socketstest\client" />
-      <recent name="C:\Users\Asche\go\src\socketstest\relay" />
+      <recent name="C:\Users\Asche\go\src\github.com\asche910\flynet\util" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -58,54 +61,52 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Go Build.go build client.go">
-    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
-      <module name="socketsproxy" />
+  <component name="RunManager" selected="Go Build.go build github.com/asche910/flynet">
+    <configuration name="go build github.com/asche910/flynet" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="flynet" />
       <working_directory value="$PROJECT_DIR$/" />
-      <go_parameters value="-i" />
       <kind value="PACKAGE" />
-      <filePath value="$PROJECT_DIR$/" />
-      <package value="socketstest" />
+      <filePath value="$PROJECT_DIR$/test.go" />
+      <package value="github.com/asche910/flynet" />
       <directory value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
-    <configuration name="go build client.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
-      <module name="socketsproxy" />
+    <configuration name="go build github.com/asche910/flynet/client-main" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="flynet" />
       <working_directory value="$PROJECT_DIR$/" />
-      <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/client/client.go" />
-      <package value="socketstest" />
-      <directory value="$PROJECT_DIR$/" />
+      <kind value="PACKAGE" />
+      <filePath value="$PROJECT_DIR$/client-main/client.go" />
+      <package value="github.com/asche910/flynet/client-main" />
       <method v="2" />
     </configuration>
-    <configuration name="go build server.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
-      <module name="socketsproxy" />
+    <configuration name="go build github.com/asche910/flynet/server-main" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="flynet" />
       <working_directory value="$PROJECT_DIR$/" />
-      <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/server/server.go" />
-      <package value="socketstest" />
+      <kind value="PACKAGE" />
+      <filePath value="$PROJECT_DIR$/server-main/server.go" />
+      <package value="github.com/asche910/flynet/server-main" />
       <directory value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
-    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
+    <configuration name="go build server.go" type="GoApplicationRunConfiguration" factoryName="Go Application" nameIsGenerated="true">
       <module name="socketsproxy" />
       <working_directory value="$PROJECT_DIR$/" />
       <go_parameters value="-i" />
-      <framework value="gotest" />
-      <kind value="DIRECTORY" />
-      <package value="socketstest" />
-      <directory value="$PROJECT_DIR$/" />
-      <filePath value="$PROJECT_DIR$/" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/server-main/server.go" />
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Go Build.go build client.go" />
       <item itemvalue="Go Build.go build server.go" />
+      <item itemvalue="Go Build.go build github.com/asche910/flynet/client-main" />
+      <item itemvalue="Go Build.go build github.com/asche910/flynet/server-main" />
+      <item itemvalue="Go Build.go build github.com/asche910/flynet" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Build.go build client.go" />
-        <item itemvalue="Go Build.go build server.go" />
+        <item itemvalue="Go Build.go build github.com/asche910/flynet" />
+        <item itemvalue="Go Build.go build github.com/asche910/flynet/client-main" />
+        <item itemvalue="Go Build.go build github.com/asche910/flynet/server-main" />
       </list>
     </recent_temporary>
   </component>

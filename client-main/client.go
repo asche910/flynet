@@ -2,26 +2,31 @@ package main
 
 import (
 	"fmt"
-	"github.com/asche910/SocketsProxy/relay"
-	"log"
+	"github.com/asche910/flynet/relay"
+	"github.com/asche910/flynet/util"
 	"net"
+)
+
+var(
+	logger = util.GetLogger()
 )
 
 func main() {
 	fmt.Println("Client start: ")
 
+
 	listener, err := net.Listen("tcp", ":8848")
 	if err != nil {
-		log.Fatalln("The port has been used!", err)
+		logger.Fatalln("The port has been used!", err)
 	}
 
 	for {
 		client, err := listener.Accept()
 		if err != nil {
-			log.Println("Accept failed!")
+			logger.Println("Accept failed!")
 			continue
 		}
-		log.Println("Client accepted!")
+		logger.Println("Client accepted!")
 
 		go handle(client)
 	}
@@ -31,7 +36,7 @@ func main() {
 func handle(client net.Conn) {
 	server, err := net.Dial("tcp", ":8088")
 	if err != nil {
-		log.Println("Connect remote failed!")
+		logger.Println("Connect remote failed!")
 		return
 	}
 

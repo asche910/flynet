@@ -2,25 +2,24 @@ package main
 
 import (
 	"fmt"
-	"io"
+	"github.com/asche910/flynet/util"
 	"log"
 	"net"
-	"os"
 )
 
-func main(){
+func main() {
 	fmt.Println("Start: ")
 
-	conn, err := net.Dial("tcp", "localhost:8088")
-	if err != nil {
-		fmt.Println("error!")
-	}
-	fmt.Println(conn)
-	str := "hello,server!"
-	conn.Write([]byte(str[:]) )
-	io.Copy(os.Stdout, conn)
+	util.SetEnableDebug(true)
+	util.SetEnableLog(true)
+	 util.GetLogger()
+	//logger.Println("Hello, world!")
+
+	_, err := net.Listen("tcp", ":80")
+	util.CheckError(err, "hhhhh")
+
 }
 
-func TestPrint(){
+func TestPrint() {
 	log.Println("Test Success!")
 }
