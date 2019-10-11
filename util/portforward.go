@@ -21,7 +21,7 @@ func PortForwardForClient(localPort, serverAddr string) {
 		}
 
 		for {
-			serverCon, err = net.Dial("tcp", ":"+localPort)
+			serverCon, err = net.Dial("tcp", serverAddr)
 			if err != nil {
 				logger.Println(err, "Dial to the target failed!")
 			} else {
@@ -29,7 +29,8 @@ func PortForwardForClient(localPort, serverAddr string) {
 				break
 			}
 		}
-		forward(localCon, serverCon)
+		logger.Println("Connect success, start forwarding...")
+		forward( serverCon, localCon)
 	}
 }
 
@@ -45,6 +46,7 @@ func PortForwardForServer(laborPort, queryPort string)  {
 			CheckError(e2, "")
 			continue
 		}
+		logger.Println("Connect success, start forwarding...")
 		forward(laborConn, queryConn)
 	}
 }
@@ -59,5 +61,6 @@ func forward(con1, con2 net.Conn) {
 
 func copyConn(con1, con2 net.Conn, wg *sync.WaitGroup)  {
 	io.Copy(con1, con2)
+	con1.Close()
 	wg.Done()
 }
