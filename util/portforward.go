@@ -6,6 +6,7 @@ import (
 	"sync"
 )
 
+// forward your local port to server port -- client
 func PortForwardForClient(localPort, serverAddr string) {
 	for {
 		var  localCon, serverCon net.Conn
@@ -34,10 +35,10 @@ func PortForwardForClient(localPort, serverAddr string) {
 	}
 }
 
+// forward your local port to server port -- server
 func PortForwardForServer(laborPort, queryPort string)  {
 	laborLn := ListenTCP(laborPort)
 	queryLn := ListenTCP(queryPort)
-
 	for {
 		laborConn, e1 := laborLn.Accept()
 		queryConn, e2 := queryLn.Accept()

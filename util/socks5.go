@@ -12,45 +12,43 @@ import (
 )
 
 func StartSocks5(port string) {
-	listener, err := net.Listen("tcp", ":"+port)
-	CheckErrorOrExit(err, PortOccupiedInfo(port))
-
+	listener := ListenTCP(port)
 	for {
 		client, err := listener.Accept()
 		if err != nil {
-			logger.Println("Accept failed!")
+			logger.Println("accept failed!")
 			continue
 		}
-		logger.Println("Client accepted!")
+		logger.Println("client accepted!")
 
 		go handleClient(client)
 	}
 }
 
 func handleClient(client net.Conn) {
-	var b [1024] byte
-	n, err := client.Read(b[:])
+	data := make([]byte, 1024)
+	n, err := client.Read(data[:])
 	if err != nil {
-		logger.Println("Read error!")
+		logger.Println("read error!")
 		return
 	}
 
-	if b[0] == 0x05 {
+	if data[0] == 0x05 {
 		// response the success of handshake to client
-		_, _ = client.Write(relay.Increase([]byte{0x05, 0x00}))
-		// read the detail request from client
-		n, err = client.Read(b[:])
-
-		var host, port string
-		switch b[3] {
-		case 0x01: // IPV4 address
-			host = net.IPv4(b[4], b[5], b[6], b[7]).String()
-		case 0x03: // domain
-			host = string(b[5 : n-2]) // b[4] stands for the length of domain
-		case 0x04: // IPV6 address
-			host = net.IP{b[4], b[5], b[6], b[7], b[8], b[9], b[10], b[11], b[12], b[13], b[14], b[15], b[16], b[17], b[18], b[19]}.String()
+		_, err = client.Write([]byte{0x05, 0x00})
+		if err != nil {
+			logger.Println("response to client failed!")
+			return
 		}
-		port = strconv.Itoa(int(b[n-2])<<8 | int(b[n-1]))
+		// read the detail request from client
+		n, err = client.Read(data[:])
+		if err != nil {
+			logger.Println("read from client failed!")
+			return
+		}
+
+		var host, port = parseSocksRequest(data, n)
+		logger.Printf("start request %s:%s\n", host, port)
 
 		// request to the target server
 		server, err := net.Dial("tcp", net.JoinHostPort(host, port))
@@ -74,15 +72,15 @@ func Socks5ForClientByTCP(localPort, serverAddr string) {
 	for {
 		client, err := listener.Accept()
 		if err != nil {
-			logger.Println("Accept failed!")
+			logger.Println("accept failed!")
 			continue
 		}
-		logger.Println("Client accepted!")
+		logger.Println("client accepted!")
 
 		go func() {
 			server, err := net.Dial("tcp", serverAddr)
 			if err != nil {
-				logger.Println("Connect remote failed!")
+				logger.Println("connect remote failed!")
 				return
 			}
 			go relay.EncodeTo(server, client)
@@ -94,17 +92,17 @@ func Socks5ForClientByTCP(localPort, serverAddr string) {
 func Socks5ForServerByTCP(localPort string) {
 	listener := ListenTCP(localPort)
 	for {
-		logger.Println("Waiting...")
+		logger.Println("waiting...")
 		client, err := listener.Accept()
 		if err != nil {
-			fmt.Println("server listener error:", err)
+			fmt.Println("server accept error:", err)
 			continue
 		}
 		go func() {
 			data := make([]byte, 1024)
 			n, err := client.Read(data[:])
 			if err != nil {
-				logger.Println("Read error!")
+				logger.Println("read error!")
 				return
 			}
 
@@ -123,7 +121,7 @@ func Socks5ForServerByTCP(localPort string) {
 				// request to the target server
 				server, err := net.Dial("tcp", net.JoinHostPort(host, port))
 				if err != nil {
-					logger.Println("Dial failed!")
+					logger.Println("dial failed!")
 					return
 				}
 				// response request success to client
@@ -143,16 +141,16 @@ func Socks5ForClientByUDP(localPort, serverAddr string) {
 	for {
 		con, err := listener.Accept()
 		if err != nil {
-			logger.Println("Accept error: ", err)
+			logger.Println("accept error: ", err)
 			continue
 		}
-		logger.Println("Client accepted!")
+		logger.Println("client accepted!")
 
 		go func() {
 			var b [1024] byte
 			_, err := con.Read(b[:])
 			if err != nil {
-				logger.Println("Read error!")
+				logger.Println("read error!")
 				return
 			}
 			if b[0] == 0x05 {
@@ -176,7 +174,7 @@ func Socks5ForServerByUDP(localPort string) {
 	key := pbkdf2.Key([]byte("flynet"), []byte("asche910"), 1024, 32, sha1.New)
 	block, _ := kcp.NewAESBlockCrypt(key)
 	if listener, err := kcp.ListenWithOptions(":"+localPort, block, 10, 3); err == nil {
-		logger.Printf("Server listent udp at %s\n", localPort)
+		logger.Printf("server listent udp at %s\n", localPort)
 		for {
 			con, err := listener.AcceptKCP()
 			if err != nil {
@@ -196,11 +194,11 @@ func Socks5ForServerByUDP(localPort string) {
 
 					// 服务器向目标网站发起请求
 					server, err := net.Dial("tcp", net.JoinHostPort(host, port))
-					logger.Printf("Request remote %s:%s\n", host, port)
+					logger.Printf("request remote %s:%s\n", host, port)
 
 					if err != nil {
-						logger.Println("Dial failed!")
-						CheckError(err, "Dial remote failed!")
+						logger.Println("dial failed!")
+						CheckError(err, "dial remote failed!")
 						return
 					}
 
@@ -208,13 +206,13 @@ func Socks5ForServerByUDP(localPort string) {
 					by := []byte{0x05, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 					n, err = con.Write(by)
 					if err != nil {
-						logger.Println("Response to client failed! ", err)
+						logger.Println("response to client failed! ", err)
 						return
 					}
 					go relay.UDPToTCP(server, con)
 					relay.TCPToUDP(con, server)
 				} else {
-					logger.Println("Unrecognized protocol!")
+					logger.Println("unrecognized protocol!")
 					return
 				}
 			}()

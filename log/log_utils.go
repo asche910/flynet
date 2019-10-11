@@ -12,7 +12,7 @@ var (
 	logger    *log.Logger
 )
 
-func InitLog()  {
+func InitLog() {
 	logger = GetLogger()
 }
 
@@ -26,13 +26,17 @@ func EnableDebug(flag bool) {
 
 // return a logger
 func GetLogger() *log.Logger {
-	f, err := os.OpenFile("flynet.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
-	if err != nil {
-		log.Println("Create logger file failed!", err)
+	var f *os.File
+	var err error
+	if logFlag {
+		f, err = os.OpenFile("flynet.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+		if err != nil {
+			log.Println("Create logger file failed!", err)
+		}
 	}
-
 	var writers []io.Writer
 	if logFlag && debugFlag {
+
 		writers = []io.Writer{f, os.Stdout}
 	} else if !logFlag && !debugFlag {
 		writers = []io.Writer{}

@@ -15,6 +15,8 @@ func main() {
 	logger := log.GetLogger()
 	logger.Println("Hello, world!")
 
+	net.UDPAddr{}
+
 	_, err := net.Listen("tcp", ":80")
 	util.CheckError(err, "hhhhh")
 

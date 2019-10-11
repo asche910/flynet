@@ -28,9 +28,9 @@ func CheckErrorOrExit(err error, info string) {
 
 // get info about port occupied
 func PortOccupiedInfo(port string) string {
-	return fmt.Sprintf("Port %s has been occuried!", port)
+	return fmt.Sprintf("port %s has been occuried!", port)
 }
 
 func AcceptErrorInfo() string {
-	return "Accept client error!"
+	return "accept client error!"
 }

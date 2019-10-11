@@ -349,3 +349,221 @@
 2019/10/11 13:05:14 portforward.go:28: Dial to :7777 success!
 2019/10/11 13:05:14 portforward.go:32: Connect success, start forwarding...
 2019/10/11 13:05:26 portforward.go:18: Dial to localhost:1080 success!
+2019/10/11 18:02:50 socks5.go:17: listen port at 8848
+2019/10/11 18:03:44 socks5.go:25: Client accepted!
+2019/10/11 18:03:44 socks5.go:25: Client accepted!
+2019/10/11 18:03:44 socks5.go:25: Client accepted!
+2019/10/11 18:05:27 socks5.go:17: listen port at 8848
+2019/10/11 18:05:27 socks5.go:25: Client accepted!
+2019/10/11 18:05:30 socks5.go:25: Client accepted!
+2019/10/11 18:05:30 socks5.go:25: Client accepted!
+2019/10/11 18:05:30 socks5.go:25: Client accepted!
+2019/10/11 18:05:33 socks5.go:25: Client accepted!
+2019/10/11 18:05:33 socks5.go:25: Client accepted!
+2019/10/11 18:05:33 socks5.go:25: Client accepted!
+2019/10/11 18:05:33 socks5.go:25: Client accepted!
+2019/10/11 18:05:33 socks5.go:25: Client accepted!
+2019/10/11 18:05:33 socks5.go:25: Client accepted!
+2019/10/11 18:05:33 socks5.go:25: Client accepted!
+2019/10/11 18:05:33 socks5.go:25: Client accepted!
+2019/10/11 18:05:33 socks5.go:25: Client accepted!
+2019/10/11 18:05:34 socks5.go:25: Client accepted!
+2019/10/11 18:05:34 socks5.go:25: Client accepted!
+2019/10/11 18:05:35 socks5.go:25: Client accepted!
+2019/10/11 18:05:35 socks5.go:25: Client accepted!
+2019/10/11 18:05:35 socks5.go:25: Client accepted!
+2019/10/11 18:05:35 socks5.go:25: Client accepted!
+2019/10/11 18:05:48 error_utils.go:18: request to the target server failed! dial tcp 74.125.204.188:5228: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/11 18:05:50 socks5.go:25: Client accepted!
+2019/10/11 18:05:55 error_utils.go:18: request to the target server failed! dial tcp 172.217.24.14:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/11 18:06:49 socks5.go:25: Client accepted!
+2019/10/11 18:07:10 error_utils.go:18: request to the target server failed! dial tcp 172.217.24.14:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/11 18:07:35 socks5.go:25: Client accepted!
+2019/10/11 18:08:41 socks5.go:25: Client accepted!
+2019/10/11 18:09:02 error_utils.go:18: request to the target server failed! dial tcp 172.217.27.142:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/11 18:12:18 net_utils.go:14: Listen tcp at: 8848
+2019/10/11 18:12:19 socks5.go:22: Client accepted!
+2019/10/11 18:12:19 socks5.go:43: start request live.github.com:443
+2019/10/11 18:12:19 socks5.go:22: Client accepted!
+2019/10/11 18:12:19 socks5.go:43: start request mtalk.google.com:5228
+2019/10/11 18:12:19 socks5.go:22: Client accepted!
+2019/10/11 18:12:19 socks5.go:43: start request live.github.com:443
+2019/10/11 18:12:20 socks5.go:22: Client accepted!
+2019/10/11 18:12:20 socks5.go:43: start request lp-push-server-543.lastpass.com:443
+2019/10/11 18:12:35 socks5.go:22: Client accepted!
+2019/10/11 18:12:35 socks5.go:22: Client accepted!
+2019/10/11 18:12:35 socks5.go:43: start request www.zhihu.com:443
+2019/10/11 18:12:35 socks5.go:43: start request static.zhihu.com:443
+2019/10/11 18:12:35 socks5.go:22: Client accepted!
+2019/10/11 18:12:35 socks5.go:43: start request unpkg.zhimg.com:443
+2019/10/11 18:12:36 socks5.go:22: Client accepted!
+2019/10/11 18:12:36 socks5.go:22: Client accepted!
+2019/10/11 18:12:36 socks5.go:43: start request pic2.zhimg.com:443
+2019/10/11 18:12:36 socks5.go:43: start request pic3.zhimg.com:443
+2019/10/11 18:12:36 socks5.go:22: Client accepted!
+2019/10/11 18:12:36 socks5.go:22: Client accepted!
+2019/10/11 18:12:36 socks5.go:43: start request pic1.zhimg.com:443
+2019/10/11 18:12:36 socks5.go:43: start request pic4.zhimg.com:443
+2019/10/11 18:12:36 socks5.go:22: Client accepted!
+2019/10/11 18:12:36 socks5.go:22: Client accepted!
+2019/10/11 18:12:36 socks5.go:43: start request pic4.zhimg.com:443
+2019/10/11 18:12:36 socks5.go:43: start request pic4.zhimg.com:443
+2019/10/11 18:12:36 socks5.go:22: Client accepted!
+2019/10/11 18:17:08 net_utils.go:14: Listen tcp at: 8848
+2019/10/11 18:17:18 socks5.go:22: Client accepted!
+2019/10/11 18:17:18 socks5.go:22: Client accepted!
+2019/10/11 18:17:18 socks5.go:51: start request www.zhihu.com:443
+2019/10/11 18:17:18 socks5.go:51: start request static.zhihu.com:443
+2019/10/11 18:17:19 socks5.go:22: Client accepted!
+2019/10/11 18:17:19 socks5.go:22: Client accepted!
+2019/10/11 18:17:19 socks5.go:51: start request pic4.zhimg.com:443
+2019/10/11 18:17:19 socks5.go:51: start request unpkg.zhimg.com:443
+2019/10/11 18:17:19 socks5.go:22: Client accepted!
+2019/10/11 18:17:19 socks5.go:51: start request pic3.zhimg.com:443
+2019/10/11 18:17:19 socks5.go:22: Client accepted!
+2019/10/11 18:17:19 socks5.go:51: start request hm.baidu.com:443
+2019/10/11 18:17:20 socks5.go:22: Client accepted!
+2019/10/11 18:17:20 socks5.go:51: start request unpkg.zhimg.com:443
+2019/10/11 18:17:20 socks5.go:22: Client accepted!
+2019/10/11 18:17:20 socks5.go:51: start request mqtt-web.zhihu.com:443
+2019/10/11 18:17:20 socks5.go:22: Client accepted!
+2019/10/11 18:17:20 socks5.go:51: start request lp-push-server-543.lastpass.com:443
+2019/10/11 18:17:21 socks5.go:22: Client accepted!
+2019/10/11 18:17:21 socks5.go:51: start request zhihu-web-analytics.zhihu.com:443
+2019/10/11 18:17:30 socks5.go:22: Client accepted!
+2019/10/11 18:17:30 socks5.go:51: start request clients4.google.com:443
+2019/10/11 18:17:51 error_utils.go:18: request to the target server failed! dial tcp 172.217.160.110:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/11 18:18:11 socks5.go:22: Client accepted!
+2019/10/11 18:18:11 socks5.go:51: start request static.zhihu.com:443
+2019/10/11 18:18:11 socks5.go:22: Client accepted!
+2019/10/11 18:18:11 socks5.go:51: start request hm.baidu.com:443
+2019/10/11 18:18:12 socks5.go:22: Client accepted!
+2019/10/11 18:18:12 socks5.go:51: start request hm.baidu.com:443
+2019/10/11 18:18:12 socks5.go:22: Client accepted!
+2019/10/11 18:18:12 socks5.go:51: start request mqtt-web.zhihu.com:443
+2019/10/11 18:18:19 socks5.go:22: Client accepted!
+2019/10/11 18:18:19 socks5.go:22: Client accepted!
+2019/10/11 18:18:19 socks5.go:51: start request www.zhihu.com:443
+2019/10/11 18:18:19 socks5.go:51: start request static.zhihu.com:443
+2019/10/11 18:18:20 socks5.go:22: Client accepted!
+2019/10/11 18:18:20 socks5.go:22: Client accepted!
+2019/10/11 18:18:20 socks5.go:51: start request pic2.zhimg.com:443
+2019/10/11 18:18:20 socks5.go:51: start request pic1.zhimg.com:443
+2019/10/11 18:18:21 socks5.go:22: Client accepted!
+2019/10/11 18:18:21 socks5.go:51: start request mqtt-web.zhihu.com:443
+2019/10/11 18:18:45 socks5.go:22: Client accepted!
+2019/10/11 18:18:45 socks5.go:51: start request clients4.google.com:443
+2019/10/11 18:19:06 error_utils.go:18: request to the target server failed! dial tcp 172.217.27.142:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/11 18:19:40 socks5.go:22: Client accepted!
+2019/10/11 18:19:40 socks5.go:51: start request mtalk.google.com:5228
+2019/10/11 18:20:50 socks5.go:22: Client accepted!
+2019/10/11 18:20:50 socks5.go:51: start request pollserver.lastpass.com:443
+2019/10/11 18:22:41 socks5.go:22: Client accepted!
+2019/10/11 18:22:41 socks5.go:51: start request clients4.google.com:443
+2019/10/11 18:23:02 error_utils.go:18: request to the target server failed! dial tcp 172.217.27.142:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/11 18:23:30 socks5.go:22: Client accepted!
+2019/10/11 18:23:30 socks5.go:51: start request pic1.zhimg.com:443
+2019/10/11 18:23:30 socks5.go:22: Client accepted!
+2019/10/11 18:23:30 socks5.go:51: start request zhihu-web-analytics.zhihu.com:443
+2019/10/11 18:23:34 socks5.go:22: Client accepted!
+2019/10/11 18:23:34 socks5.go:51: start request clients4.google.com:443
+2019/10/11 18:23:55 error_utils.go:18: request to the target server failed! dial tcp 172.217.27.142:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/11 18:24:10 socks5.go:22: Client accepted!
+2019/10/11 18:24:10 socks5.go:51: start request www.zhihu.com:443
+2019/10/11 18:24:11 socks5.go:22: Client accepted!
+2019/10/11 18:24:11 socks5.go:51: start request video.zhihu.com:443
+2019/10/11 18:24:11 socks5.go:22: Client accepted!
+2019/10/11 18:24:11 socks5.go:22: Client accepted!
+2019/10/11 18:24:11 socks5.go:22: Client accepted!
+2019/10/11 18:24:11 socks5.go:51: start request static.zhihu.com:443
+2019/10/11 18:24:11 socks5.go:51: start request unpkg.zhimg.com:443
+2019/10/11 18:24:11 socks5.go:51: start request static.zhihu.com:443
+2019/10/11 18:24:12 socks5.go:22: Client accepted!
+2019/10/11 18:24:12 socks5.go:51: start request lens.zhihu.com:443
+2019/10/11 18:24:12 socks5.go:22: Client accepted!
+2019/10/11 18:24:12 socks5.go:51: start request lens.zhihu.com:443
+2019/10/11 18:24:12 socks5.go:22: Client accepted!
+2019/10/11 18:24:12 socks5.go:51: start request vdn2.vzuu.com:443
+2019/10/11 18:24:17 socks5.go:22: Client accepted!
+2019/10/11 18:24:17 socks5.go:51: start request pic3.zhimg.com:443
+2019/10/11 18:24:21 socks5.go:22: Client accepted!
+2019/10/11 18:24:21 socks5.go:51: start request vdn2.vzuu.com:443
+2019/10/11 18:24:35 socks5.go:22: Client accepted!
+2019/10/11 18:24:35 socks5.go:51: start request pic2.zhimg.com:443
+2019/10/11 18:24:37 socks5.go:22: Client accepted!
+2019/10/11 18:24:37 socks5.go:51: start request pic4.zhimg.com:443
+2019/10/11 18:24:49 socks5.go:22: Client accepted!
+2019/10/11 18:24:49 socks5.go:51: start request www.zhihu.com:443
+2019/10/11 18:24:59 socks5.go:22: Client accepted!
+2019/10/11 18:24:59 socks5.go:51: start request live.github.com:443
+2019/10/11 18:25:00 socks5.go:22: Client accepted!
+2019/10/11 18:25:00 socks5.go:51: start request clients1.google.com:443
+2019/10/11 18:25:02 socks5.go:22: Client accepted!
+2019/10/11 18:25:02 socks5.go:51: start request clients4.google.com:443
+2019/10/11 18:25:21 error_utils.go:18: request to the target server failed! dial tcp 172.217.27.142:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/11 18:25:21 socks5.go:22: Client accepted!
+2019/10/11 18:25:21 socks5.go:51: start request www.v2ex.com:443
+2019/10/11 18:25:22 socks5.go:22: Client accepted!
+2019/10/11 18:25:23 socks5.go:51: start request hm.baidu.com:443
+2019/10/11 18:25:23 socks5.go:22: Client accepted!
+2019/10/11 18:25:23 socks5.go:51: start request cdn.v2ex.com:443
+2019/10/11 18:25:23 socks5.go:22: Client accepted!
+2019/10/11 18:25:23 socks5.go:22: Client accepted!
+2019/10/11 18:25:23 socks5.go:51: start request cdn.v2ex.com:443
+2019/10/11 18:25:23 socks5.go:51: start request cdn.v2ex.com:443
+2019/10/11 18:25:23 socks5.go:22: Client accepted!
+2019/10/11 18:25:23 socks5.go:51: start request cdn.v2ex.com:443
+2019/10/11 18:25:23 socks5.go:22: Client accepted!
+2019/10/11 18:25:23 socks5.go:51: start request cdn.v2ex.com:443
+2019/10/11 18:25:23 socks5.go:22: Client accepted!
+2019/10/11 18:25:23 socks5.go:51: start request cdn.v2ex.com:443
+2019/10/11 18:25:23 socks5.go:22: Client accepted!
+2019/10/11 18:25:23 socks5.go:51: start request www.google-analytics.com:443
+2019/10/11 18:25:23 error_utils.go:18: request to the target server failed! dial tcp 172.217.27.142:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/11 18:25:23 socks5.go:22: Client accepted!
+2019/10/11 18:25:23 socks5.go:51: start request stats.g.doubleclick.net:443
+2019/10/11 18:25:30 socks5.go:22: Client accepted!
+2019/10/11 18:25:30 socks5.go:51: start request static.v2ex.com:443
+2019/10/11 18:25:33 socks5.go:22: Client accepted!
+2019/10/11 18:25:33 socks5.go:51: start request clients4.google.com:443
+2019/10/11 18:25:54 error_utils.go:18: request to the target server failed! dial tcp 172.217.27.142:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/11 18:27:05 socks5.go:22: Client accepted!
+2019/10/11 18:27:05 socks5.go:51: start request clients4.google.com:443
+2019/10/11 18:27:19 socks5.go:22: Client accepted!
+2019/10/11 18:27:19 socks5.go:51: start request clients4.google.com:443
+2019/10/11 18:27:26 error_utils.go:18: request to the target server failed! dial tcp 172.217.24.14:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/11 18:27:40 error_utils.go:18: request to the target server failed! dial tcp 172.217.24.14:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/11 18:29:39 socks5.go:22: Client accepted!
+2019/10/11 18:29:39 socks5.go:22: Client accepted!
+2019/10/11 18:29:39 socks5.go:51: start request www.google.com:443
+2019/10/11 18:29:39 socks5.go:51: start request www.gstatic.com:443
+2019/10/11 18:29:42 socks5.go:22: Client accepted!
+2019/10/11 18:29:42 socks5.go:51: start request clients4.google.com:443
+2019/10/11 18:30:00 error_utils.go:18: request to the target server failed! dial tcp 69.171.245.49:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/11 18:30:03 error_utils.go:18: request to the target server failed! dial tcp 172.217.24.14:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+2019/10/11 19:04:28 server.go:20: [C:\Users\Asche\AppData\Local\Temp\___go_build_github_com_asche910_flynet_cmd_server.exe -addr 127 -sdf sdfsfdsf]
+2019/10/11 19:04:28 net_utils.go:14: listen tcp at: 8848
+2019/10/11 19:05:02 server.go:21: [-addr 127 -sdf sdfsfdsf]
+2019/10/11 19:05:02 net_utils.go:14: listen tcp at: 8848
+2019/10/11 19:05:39 server.go:21: [-addr 127 -sdf sdfsfdsf]
+2019/10/11 19:05:39 server.go:22: 4
+2019/10/11 19:05:39 net_utils.go:14: listen tcp at: 8848
+2019/10/11 19:45:22 server.go:40: args length 4
+2019/10/11 19:45:22 net_utils.go:14: listen tcp at: 8848
+2019/10/11 19:47:02 server.go:40: args length 4
+2019/10/11 19:47:02 net_utils.go:14: listen tcp at: 8848
+2019/10/11 19:47:32 server.go:40: args length 4
+2019/10/11 19:47:32 net_utils.go:14: listen tcp at: 8848
+2019/10/11 19:47:58 server.go:40: args length 4
+2019/10/11 19:47:58 net_utils.go:14: listen tcp at: 8848
+2019/10/11 19:48:15 server.go:40: args length 4
+2019/10/11 19:48:15 net_utils.go:14: listen tcp at: 8848
+2019/10/11 19:51:24 server.go:41: args length 4
+2019/10/11 19:51:24 net_utils.go:14: listen tcp at: 8848
+2019/10/11 19:55:06 server.go:44: args length 4
+2019/10/11 19:55:06 net_utils.go:14: listen tcp at: 8848
+2019/10/11 19:57:03 server.go:44: args length 4
+2019/10/11 19:57:03 net_utils.go:14: listen tcp at: 8848
+2019/10/11 21:05:35 server.go:52: args length 4
+2019/10/11 21:05:35 server.go:110: flynet: please input correct command!
+2019/10/11 21:06:18 server.go:52: args length 4

@@ -11,15 +11,14 @@ import (
 
 // start http proxy at port
 func StartHttp(port string) {
-	ln, err := net.Listen("tcp", ":"+port)
-	CheckErrorOrExit(err, PortOccupiedInfo(port))
-
+	ln := ListenTCP(port)
 	for {
 		client, err := ln.Accept()
 		if err != nil {
 			CheckError(err, AcceptErrorInfo())
 			continue
 		}
+		logger.Println("accept success!")
 		go handleClientRequest(client)
 	}
 }
@@ -36,8 +35,14 @@ func handleClientRequest(client net.Conn) {
 		logger.Println(err)
 		return
 	}
+	index := bytes.IndexByte(b[:], '\n')
+
+	if index == -1 {
+		index = len(b) - 1
+		logger.Println("parse request error:", string(b[:]))
+	}
 	var method, host, address string
-	_, _ = fmt.Sscanf(string(b[:bytes.IndexByte(b[:], '\n')]), "%s%s", &method, &host)
+	_, _ = fmt.Sscanf(string(b[:]), "%s%s", &method, &host)
 	hostPortURL, err := url.Parse(host)
 	if err != nil {
 		logger.Println(err)
