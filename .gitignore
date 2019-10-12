@@ -1,0 +1,4 @@
+/.idea
+/test.go
+/cmd/client/client.exe
+/cmd/server/server.exe
