@@ -1,6 +1,8 @@
 package relay
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
 	log2 "github.com/asche910/flynet/log"
 	"github.com/xtaci/kcp-go"
 	"io"
@@ -8,9 +10,12 @@ import (
 	"net"
 )
 
-const CIP = 5
+const key = "asche910-flynet-"
 
-var logger *log.Logger
+var (
+	commonIV = []byte{0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f}
+	logger   *log.Logger
+)
 
 func InitLog() {
 	logger = log2.GetLogger()
@@ -55,16 +60,14 @@ func EncodeTo(writer io.Writer, reader io.Reader) {
 	for {
 		n, err := reader.Read(buff[:])
 		if err != nil {
-			log.Println("Endode failed!")
+			logger.Println("EncodeTo ---> read failed!", err)
 			return
 		}
-		if n < 0 {
-			return
-		}
-		buff = Increase(buff)
+		//fmt.Println(n)
+		buff = Encrypt(buff, n)
 		n, err = writer.Write(buff[:n])
 		if err != nil {
-			log.Println("Write failed!")
+			logger.Println("EncodeTo ---> write failed!", err)
 		}
 	}
 }
@@ -74,13 +77,11 @@ func DecodeTo(writer io.Writer, reader io.Reader) {
 	for {
 		n, err := reader.Read(buff[:])
 		if err != nil {
-			log.Println("Decode failed!")
+			logger.Println("read failed!")
 			return
 		}
-		if n < 0 {
-			return
-		}
-		buff = Decrease(buff)
+		//fmt.Println(n)
+		buff = DeCrypt(buff, n)
 		n, err = writer.Write(buff[:n])
 		if err != nil {
 			log.Println("Write failed!-")
@@ -88,16 +89,24 @@ func DecodeTo(writer io.Writer, reader io.Reader) {
 	}
 }
 
-func Increase(by []byte) []byte {
-	for i := 0; i < len(by); i++ {
-		by[i] = by[i] + CIP
+func Encrypt(by []byte, n int) []byte {
+	c, err := aes.NewCipher([]byte(key))
+	if err != nil {
+		logger.Println("aes.NewCipher failed!", err)
 	}
-	return by
+	encrypter := cipher.NewCFBEncrypter(c, commonIV)
+	var buff = make([]byte, 1024)
+	encrypter.XORKeyStream(buff[:n], by[:n])
+	return buff
 }
 
-func Decrease(by []byte) []byte {
-	for i := 0; i < len(by); i++ {
-		by[i] = by[i] - CIP
+func DeCrypt(by []byte, n int) []byte {
+	c, err := aes.NewCipher([]byte(key))
+	if err != nil {
+		logger.Println("aes.NewCipher failed!", err)
 	}
-	return by
+	decrypter := cipher.NewCFBDecrypter(c, commonIV)
+	var buff = make([]byte, 1024)
+	decrypter.XORKeyStream(buff[:n], by[:n])
+	return buff
 }

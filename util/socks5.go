@@ -108,15 +108,19 @@ func Socks5ForServerByTCP(localPort string) {
 			}
 
 			//logger.Println(data[:])
-			relay.Decrease(data[:])
+			data = relay.DeCrypt(data[:], n)
 			//logger.Println(data[:])
 
 			if data[0] == 0x05 {
 				// response the success of handshake to client
-				_, _ = client.Write(relay.Increase([]byte{0x05, 0x00}))
+				_, _ = client.Write(relay.Encrypt([]byte{0x05, 0x00}, 2)[:2])
 				// read the detail request from client
 				n, err = client.Read(data[:])
-				relay.Decrease(data[:])
+				if err != nil {
+					logger.Println("read request failed!", err)
+					return
+				}
+				data = relay.DeCrypt(data[:n], n)
 
 				var host, port = parseSocksRequest(data, n)
 				// request to the target server
@@ -127,8 +131,9 @@ func Socks5ForServerByTCP(localPort string) {
 				}
 				// response request success to client
 				by := []byte{0x05, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
-				relay.Increase(by)
-				_, _ = client.Write(by)
+				byLen := len(by)
+				by = relay.Encrypt(by[:], byLen)
+				_, _ = client.Write(by[:byLen])
 
 				go relay.DecodeTo(server, client)
 				relay.EncodeTo(client, server)
