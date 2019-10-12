@@ -9,6 +9,7 @@ import (
 	"io"
 	"net"
 	"strconv"
+	"strings"
 )
 
 func StartSocks5(port string) {
@@ -156,6 +157,11 @@ func Socks5ForClientByUDP(localPort, serverAddr string) {
 			if b[0] == 0x05 {
 				_, _ = con.Write([]byte{0x05, 0x00})
 
+				// kcp can't resolve addr such as ":8080"
+				if strings.HasPrefix(serverAddr, ":") {
+					serverAddr = "127.0.0.1" + serverAddr
+				}
+
 				key := pbkdf2.Key([]byte("flynet"), []byte("asche910"), 1024, 32, sha1.New)
 				block, _ := kcp.NewAESBlockCrypt(key)
 				session, err := kcp.DialWithOptions(serverAddr, block, 10, 3)
@@ -189,10 +195,9 @@ func Socks5ForServerByUDP(localPort string) {
 				}
 				//logger.Println(string(data[:n]))
 				if data[0] == 5 && data[1] == 1 && data[2] == 0 {
-					// 解析并请求内容
 					var host, port = parseSocksRequest(data, n)
 
-					// 服务器向目标网站发起请求
+					// request to the target server
 					server, err := net.Dial("tcp", net.JoinHostPort(host, port))
 					logger.Printf("request remote %s:%s\n", host, port)
 
@@ -202,7 +207,7 @@ func Socks5ForServerByUDP(localPort string) {
 						return
 					}
 
-					//响应客户端请求成功
+					// response request success to client
 					by := []byte{0x05, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 					n, err = con.Write(by)
 					if err != nil {

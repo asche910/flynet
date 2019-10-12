@@ -26,7 +26,6 @@ func main() {
 	}
 	parseArgs(os.Args[1:])
 	checkArgs()
-	printHelp()
 
 	switch flyServer.Mode {
 	case 1:
@@ -48,17 +47,17 @@ func main() {
 
 func printHelp() {
 	fmt.Println(`Usage: flynet [options]
-  -M, --mode		choose which mode to run. the mode must be one of['http', 'socks5', 
-					'socks5-tcp', 'socks5-udp', 'forward']
-  -L, --listen		listen which port(s) to listen
-  -S, --server		the server address client connect to
-  -V, --verbose		output detail info
-  -l, --log			output detail info to log file
-  -H, --help		show detail usage
+  -M, --mode        choose which mode to run. the mode must be one of['http', 'socks5', 
+                    'socks5-tcp', 'socks5-udp', 'forward']
+  -L, --listen      choose which port(s) to listen or forward
+  -V, --verbose     output detail info
+  -l, --log         output detail info to log file
+  -H, --help        show detail usage
 
 Mail bug reports and suggestions to <asche910@gmail.com>
 or github: https://github.com/asche910/flynet`)
 }
+
 
 func parseArgs(args []string) {
 	if len(args) < 1{
@@ -105,8 +104,6 @@ func parseArgs(args []string) {
 			printHelp()
 			os.Exit(1)
 		}
-	case "--server", "-S":
-
 	case "--verbose", "-V":
 		log.EnableDebug(true)
 		parseArgs(args[1:])

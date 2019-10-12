@@ -4,15 +4,8 @@
     <list default="true" id="7f71bfd3-ba43-4ca3-9c26-0119a44c2810" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/flyclient.go" beforeDir="false" afterPath="$PROJECT_DIR$/client/flyclient.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/client/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/client/client.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/server/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flynet.log" beforeDir="false" afterPath="$PROJECT_DIR$/flynet.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/log_utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/log/log_utils.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/flyserver.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/flyserver.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/error_utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/error_utils.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/http.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/http.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/net_utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/net_utils.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/portforward.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/portforward.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/util/socks5.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/socks5.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -40,6 +33,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$" />
+    <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">

@@ -3,12 +3,11 @@ package client
 import "github.com/asche910/flynet/util"
 
 type FlyClient struct {
-	mode string
+	Mode int
 	localhost string
-	ports []string // ports[0] stands for the listening port; others are for reserve
+	Ports []string // ports[0] stands for the listening port; others are for reserve
 	protocol string // tcp or udp protocol
-	serverHost string
-	serverPort string
+	ServerAddr string
 
 }
 
