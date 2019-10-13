@@ -1,8 +1,6 @@
 package relay
 
 import (
-	"crypto/aes"
-	"crypto/cipher"
 	log2 "github.com/asche910/flynet/log"
 	"github.com/xtaci/kcp-go"
 	"io"
@@ -61,7 +59,7 @@ func EncodeTo(writer io.Writer, reader io.Reader) {
 		n, err := reader.Read(buff[:])
 		if err != nil {
 			logger.Println("EncodeTo ---> read failed!", err)
-			return
+			break
 		}
 		//fmt.Println(n)
 		buff = Encrypt(buff, n)
@@ -77,36 +75,38 @@ func DecodeTo(writer io.Writer, reader io.Reader) {
 	for {
 		n, err := reader.Read(buff[:])
 		if err != nil {
-			logger.Println("read failed!")
+			logger.Println("DecodeTo ---> read failed!", err)
 			return
 		}
 		//fmt.Println(n)
 		buff = DeCrypt(buff, n)
 		n, err = writer.Write(buff[:n])
 		if err != nil {
-			log.Println("Write failed!-")
+			logger.Println("DecodeTo ---> write failed!", err)
 		}
 	}
 }
 
 func Encrypt(by []byte, n int) []byte {
-	c, err := aes.NewCipher([]byte(key))
-	if err != nil {
-		logger.Println("aes.NewCipher failed!", err)
-	}
-	encrypter := cipher.NewCFBEncrypter(c, commonIV)
-	var buff = make([]byte, 1024)
-	encrypter.XORKeyStream(buff[:n], by[:n])
-	return buff
+	/*	c, err := aes.NewCipher([]byte(key))
+		if err != nil {
+			logger.Println("aes.NewCipher failed!", err)
+		}
+		encrypter := cipher.NewCFBEncrypter(c, commonIV)
+		var buff = make([]byte, 1024)
+		encrypter.XORKeyStream(buff[:n], by[:n])*/
+	// TODO add encrypt algorithm
+	return by
 }
 
 func DeCrypt(by []byte, n int) []byte {
-	c, err := aes.NewCipher([]byte(key))
-	if err != nil {
-		logger.Println("aes.NewCipher failed!", err)
-	}
-	decrypter := cipher.NewCFBDecrypter(c, commonIV)
-	var buff = make([]byte, 1024)
-	decrypter.XORKeyStream(buff[:n], by[:n])
-	return buff
+	/*		c, err := aes.NewCipher([]byte(key))
+			if err != nil {
+				logger.Println("aes.NewCipher failed!", err)
+			}
+			decrypter := cipher.NewCFBDecrypter(c, commonIV)
+			var buff = make([]byte, 1024)
+			decrypter.XORKeyStream(buff[:n], by[:n])*/
+	// TODO add decrypt algorithm
+	return by
 }

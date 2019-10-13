@@ -8,7 +8,7 @@ import (
 
 var (
 	logFlag   = false
-	debugFlag = true
+	debugFlag = false
 	logger    *log.Logger
 )
 
@@ -47,7 +47,8 @@ func GetLogger() *log.Logger {
 	}
 
 	targetWriter := io.MultiWriter(writers...)
-	logg := log.New(targetWriter, "", log.Ldate|log.Ltime|log.Lshortfile)
+	// cancel log.Lshortfile
+	logg := log.New(targetWriter, "", log.Ldate|log.Ltime)
 	logger = logg
 	return logg
 }

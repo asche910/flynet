@@ -18,14 +18,13 @@ var (
 )
 
 func main() {
-	initLog()
-
 	if len(os.Args) < 2 {
 		printHelp()
 		return
 	}
 	parseArgs(os.Args[1:])
 	checkArgs()
+	initLog()
 
 	switch flyServer.Mode {
 	case 1:
