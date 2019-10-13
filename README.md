@@ -16,8 +16,10 @@
 ###  安装
 Windows、linux用户可以直接在[Releases页面](https://github.com/asche910/flynet/releases)下载对应的版本即可，其他平台可自行下载源码编译。
 
-Windows中命令行进入到相应目录，```.\win-client.exe ...```或  ```.\win-server.exe ...```，
-Linux中同样的， ```./linux-server ...```或```./linux-client ...```，
+Windows中命令行进入到相应目录，```.\win-client.exe ...```或  ```.\win-server.exe ...```
+
+Linux中同样的， ```./linux-server ...```或```./linux-client ...```
+
 在下文中皆以```server ...```或```client ...```表示。
 
 尝试运行后，如果输出如下信息表示成功：
@@ -62,6 +64,7 @@ client -M socks5 -L 8848
 
 ### C/S模式的Socks5代理-TCP
 前面的那个是在本地上的socks5代理，这个则是client和server相互配合的socks5代理，并且中间是以tcp协议传输。用途的话，自由发挥吧。使用方法如下：
+
 **服务端**
 ```
 server -M socks5-tcp -L 8888
@@ -91,6 +94,7 @@ client -M socks5-udp -L 8848 -S asche.top:53
 > 内网穿透，即NAT穿透，网络连接时术语，计算机是局域网内时，外网与内网的计算机节点需要连接通信，有时就会出现不支持内网穿透。就是说映射端口，能让外网的电脑找到处于内网的电脑，提高下载速度
 
 简单点说就是让外网能够访问到内网中的机器。这里该工具所做的就是将内网的某个端口映射到服务器的某个端口中去，这样通过访问服务器的某个端口就可以间接的访问到内网中的端口了。方法如下：
+
 **服务端**
 ```
 server -M forward -L 8888 8080
