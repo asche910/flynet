@@ -3,15 +3,15 @@ package main
 import (
 	"fmt"
 	"github.com/asche910/flynet/client"
+	"github.com/asche910/flynet/fly"
 	"github.com/asche910/flynet/log"
-	"github.com/asche910/flynet/flynet"
 	log2 "log"
 	"os"
 	"strings"
 )
 
 var (
-	logger *log2.Logger
+	logger    *log2.Logger
 	flyClient = client.FlyClient{}
 )
 
@@ -37,13 +37,13 @@ func main() {
 		ports := flyClient.Ports
 		flyClient.PortForward(ports[0], flyClient.ServerAddr)
 	default:
-		fmt.Println("flynet: unknown error!")
+		fmt.Println("fly: unknown error!")
 		os.Exit(1)
 	}
 }
 
 func printHelp() {
-	fmt.Println(`Usage: flynet [options]
+	fmt.Println(`Usage: fly [options]
   -M, --mode        choose which mode to run. the mode must be one of['http', 'socks5', 
                     'socks5-tcp', 'socks5-udp', 'forward']
   -L, --listen      choose which port(s) to listen or forward
@@ -53,11 +53,11 @@ func printHelp() {
   -H, --help        show detail usage
 
 Mail bug reports and suggestions to <asche910@gmail.com>
-or github: https://github.com/asche910/flynet`)
+or github: https://github.com/asche910/fly`)
 }
 
 func parseArgs(args []string) {
-	if len(args) < 1{
+	if len(args) < 1 {
 		return
 	}
 	switch args[0] {
@@ -75,21 +75,21 @@ func parseArgs(args []string) {
 			case "forward":
 				flyClient.Mode = 5
 			default:
-				fmt.Println("flynet: no correct mode found!")
+				fmt.Println("fly: no correct mode found!")
 				printHelp()
 				os.Exit(1)
 			}
 			parseArgs(args[2:])
 		} else {
-			fmt.Println("flynet: no detail mode found!")
+			fmt.Println("fly: no detail mode found!")
 			printHelp()
 			os.Exit(1)
 		}
 	case "--listen", "-L":
 		if len(args) > 1 && !strings.HasPrefix(args[1], "-") {
-			port1 := flynet.CheckPort(args[1])
+			port1 := fly.CheckPort(args[1])
 			if len(args) > 2 && !strings.HasPrefix(args[2], "-") {
-				port2 := flynet.CheckPort(args[2])
+				port2 := fly.CheckPort(args[2])
 				flyClient.Ports = []string{port1, port2}
 				parseArgs(args[3:])
 			} else {
@@ -97,7 +97,7 @@ func parseArgs(args []string) {
 				parseArgs(args[2:])
 			}
 		} else {
-			fmt.Println("flynet: no port found!")
+			fmt.Println("fly: no port found!")
 			printHelp()
 			os.Exit(1)
 		}
@@ -105,8 +105,8 @@ func parseArgs(args []string) {
 		if len(args) > 1 && !strings.HasPrefix(args[1], "-") {
 			flyClient.ServerAddr = args[1]
 			parseArgs(args[2:])
-		}else {
-			fmt.Println("flynet: no correct serverAddr found!")
+		} else {
+			fmt.Println("fly: no correct serverAddr found!")
 			printHelp()
 			os.Exit(1)
 		}
@@ -121,28 +121,28 @@ func parseArgs(args []string) {
 		parseArgs(args[1:])
 		os.Exit(0)
 	default:
-		fmt.Println("flynet: please input correct command!")
+		fmt.Println("fly: please input correct command!")
 		printHelp()
 		os.Exit(1)
 	}
 }
 
-func checkArgs()  {
+func checkArgs() {
 	mode := flyClient.Mode
 	if mode == 0 {
 		fmt.Println("Please choose a mode!")
 		printHelp()
 		os.Exit(1)
-	}else if mode == 3 || mode == 4 || mode == 5{
-		if flyClient.ServerAddr == ""{
-			fmt.Println("flynet: please input serverAddr!")
+	} else if mode == 3 || mode == 4 || mode == 5 {
+		if flyClient.ServerAddr == "" {
+			fmt.Println("fly: please input serverAddr!")
 			printHelp()
 			os.Exit(1)
 		}
 	}
 
 	if len(flyClient.Ports) != 1 {
-		fmt.Println("flynet: please choose a port!")
+		fmt.Println("fly: please choose a port!")
 		printHelp()
 		os.Exit(1)
 	}
@@ -150,7 +150,7 @@ func checkArgs()  {
 
 func initLog() {
 	log.InitLog()
-	flynet.InitLog()
-	flynet.InitLog()
+	fly.InitLog()
+	fly.InitLog()
 	logger = log.GetLogger()
 }

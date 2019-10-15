@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/asche910/flynet/flynet"
+	"github.com/asche910/flynet/fly"
 	"net"
 )
 
@@ -15,21 +15,21 @@ type FlyServer struct {
 }
 
 func (server *FlyServer) LocalSocks5Proxy(port string) {
-	flynet.StartSocks5(port)
+	fly.StartSocks5(port)
 }
 
 func (server *FlyServer) LocalHttpProxy(port string) {
-	flynet.StartHttp(port)
+	fly.StartHttp(port)
 }
 
 func (server *FlyServer) Socks5ProxyForTCP(localPort string) {
-	flynet.Socks5ForServerByTCP(localPort)
+	fly.Socks5ForServerByTCP(localPort)
 }
 
 func (server *FlyServer) Socks5ProxyForUDP(localPort string) {
-	flynet.Socks5ForServerByUDP(localPort)
+	fly.Socks5ForServerByUDP(localPort)
 }
 
 func (server *FlyServer) PortForward(laborPort, queryPort string) {
-	flynet.PortForwardForServer(laborPort, queryPort)
+	fly.PortForwardForServer(laborPort, queryPort)
 }
