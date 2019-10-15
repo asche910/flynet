@@ -3,9 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/asche910/flynet/log"
-	"github.com/asche910/flynet/relay"
 	"github.com/asche910/flynet/server"
-	"github.com/asche910/flynet/util"
+	"github.com/asche910/flynet/flynet"
 	log2 "log"
 	"os"
 	"strings"
@@ -89,9 +88,9 @@ func parseArgs(args []string) {
 		}
 	case "--listen", "-L":
 		if len(args) > 1 && !strings.HasPrefix(args[1], "-") {
-			port1 := util.CheckPort(args[1])
+			port1 := flynet.CheckPort(args[1])
 			if len(args) > 2 && !strings.HasPrefix(args[2], "-") {
-				port2 := util.CheckPort(args[2])
+				port2 := flynet.CheckPort(args[2])
 				flyServer.Ports = []string{port1, port2}
 				parseArgs(args[3:])
 			} else {
@@ -142,7 +141,7 @@ func checkArgs()  {
 
 func initLog() {
 	log.InitLog()
-	util.InitLog()
-	relay.InitLog()
+	flynet.InitLog()
+	flynet.InitLog()
 	logger = log.GetLogger()
 }

@@ -1,6 +1,6 @@
 package client
 
-import "github.com/asche910/flynet/util"
+import "github.com/asche910/flynet/flynet"
 
 type FlyClient struct {
 	Mode int
@@ -12,21 +12,21 @@ type FlyClient struct {
 }
 
 func (client *FlyClient) LocalSocks5Proxy(port string) {
-	util.StartSocks5(port)
+	flynet.StartSocks5(port)
 }
 
 func (client *FlyClient) LocalHttpProxy(port string) {
-	util.StartHttp(port)
+	flynet.StartHttp(port)
 }
 
 func (client *FlyClient) Socks5ProxyForTCP(localPort, serverAddr string) {
-	util.Socks5ForClientByTCP(localPort, serverAddr)
+	flynet.Socks5ForClientByTCP(localPort, serverAddr)
 }
 
 func (client *FlyClient) Socks5ProxyForUDP(localPort, serverAddr string) {
-	util.Socks5ForClientByUDP(localPort, serverAddr)
+	flynet.Socks5ForClientByUDP(localPort, serverAddr)
 }
 
 func (client *FlyClient) PortForward(laborPort, serverAddr string) {
-	util.PortForwardForClient(laborPort, serverAddr)
+	flynet.PortForwardForClient(laborPort, serverAddr)
 }
