@@ -1,4 +1,4 @@
-package util
+package fly
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 func ListenTCP(localPort string) net.Listener {
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", localPort))
 	if err != nil {
-		logger.Panicf("the port %s has been used!---> %s \n", localPort, err.Error())
+		logger.Panicln(PortOccupiedInfo(localPort), err.Error())
 	}
 	logger.Printf("listen tcp at: %s\n", localPort)
 	return listener
@@ -20,7 +20,7 @@ func ListenTCP(localPort string) net.Listener {
 func ListenUDP(localPort string) net.Listener {
 	listener, err := net.Listen("udp", fmt.Sprintf(":%s", localPort))
 	if err != nil {
-		logger.Panicf("the port %s has been used!---> %s \n", localPort, err.Error())
+		logger.Panicln(PortOccupiedInfo(localPort), err.Error())
 	}
 	logger.Printf("listen udp at: %s\n", localPort)
 	return listener

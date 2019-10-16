@@ -1,9 +1,7 @@
-package util
+package fly
 
 import (
 	"crypto/sha1"
-	"fmt"
-	"github.com/asche910/flynet/relay"
 	"github.com/xtaci/kcp-go"
 	"golang.org/x/crypto/pbkdf2"
 	"io"
@@ -68,7 +66,7 @@ func handleClient(client net.Conn) {
 	}
 }
 
-func Socks5ForClientByTCP(localPort, serverAddr string) {
+func Socks5ForClientByTCP(localPort, serverAddr, method, key string) {
 	listener := ListenTCP(localPort)
 	for {
 		client, err := listener.Accept()
@@ -79,65 +77,73 @@ func Socks5ForClientByTCP(localPort, serverAddr string) {
 		logger.Println("client accepted!")
 
 		go func() {
-			server, err := net.Dial("tcp", serverAddr)
+			buff := make([]byte, 259)
+			n, err := client.Read(buff)
 			if err != nil {
-				logger.Println("connect remote failed!")
-				return
+				logger.Println("read handshake request failed!", err)
 			}
-			go relay.EncodeTo(server, client)
-			relay.DecodeTo(client, server)
+			if buff[0] == 0x05 {
+				if n, err = client.Write([]byte{0x05, 0x00}); err != nil {
+					logger.Println("write handshake response failed!", err)
+				}
+
+				// read detail request
+				if n, err = io.ReadAtLeast(client, buff, 5); err != nil {
+					logger.Println("read client quest failed!", err)
+				}
+				replyBy := []byte{0x05, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+				if _, err = client.Write(replyBy); err != nil {
+					logger.Println("write 'request success' failed!", err)
+				}
+
+				//
+				//        +----+-----+-------+------+----------+----------+
+				//        |VER | CMD |  RSV  | ATYP | DST.ADDR | DST.PORT |
+				//        +----+-----+-------+------+----------+----------+
+				//        | 1  |  1  | X'00' |  1   | Variable |    2     |
+				//        +----+-----+-------+------+----------+----------+
+				//
+				server := DialWithAddr(serverAddr, method, key, buff[:n])
+				if server == nil {
+					return
+				}
+
+				go RelayTraffic(server, client)
+				RelayTraffic(client, server)
+			}
 		}()
 	}
 }
 
-func Socks5ForServerByTCP(localPort string) {
+func Socks5ForServerByTCP(localPort, method, key string) {
 	listener := ListenTCP(localPort)
 	for {
 		logger.Println("waiting...")
 		client, err := listener.Accept()
 		if err != nil {
-			fmt.Println("server accept error:", err)
+			logger.Println("server accept failed!", err)
 			continue
 		}
 		go func() {
-			data := make([]byte, 1024)
-			n, err := client.Read(data[:])
+			buff := make([]byte, 1024)
+			conn := NewConn(client, NewCipherInstance(key, method))
+			n, err := conn.Read(buff)
 			if err != nil {
-				logger.Println("read error!")
+				logger.Println("read target address failed!", err)
 				return
 			}
 
-			//logger.Println(data[:])
-			data = relay.DeCrypt(data[:], n)
-			//logger.Println(data[:])
+			host, port := parseSocksRequest(buff[:n], n)
+			logger.Printf("target server %s:%s\n", host, port)
 
-			if data[0] == 0x05 {
-				// response the success of handshake to client
-				_, _ = client.Write(relay.Encrypt([]byte{0x05, 0x00}, 2)[:2])
-				// read the detail request from client
-				n, err = client.Read(data[:])
-				if err != nil {
-					logger.Println("read request failed!", err)
-					return
-				}
-				data = relay.DeCrypt(data[:n], n)
-
-				var host, port = parseSocksRequest(data, n)
-				// request to the target server
-				server, err := net.Dial("tcp", net.JoinHostPort(host, port))
-				if err != nil {
-					logger.Println("dial failed!")
-					return
-				}
-				// response request success to client
-				by := []byte{0x05, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
-				byLen := len(by)
-				by = relay.Encrypt(by[:], byLen)
-				_, _ = client.Write(by[:byLen])
-
-				go relay.DecodeTo(server, client)
-				relay.EncodeTo(client, server)
+			// dial the target server
+			server, err := net.Dial("tcp", net.JoinHostPort(host, port))
+			if err != nil {
+				logger.Println("dial target server failed!", err)
+				return
 			}
+			go RelayTraffic(server, conn)
+			RelayTraffic(conn, server)
 		}()
 	}
 }
@@ -167,22 +173,22 @@ func Socks5ForClientByUDP(localPort, serverAddr string) {
 					serverAddr = "127.0.0.1" + serverAddr
 				}
 
-				key := pbkdf2.Key([]byte("flynet"), []byte("asche910"), 1024, 32, sha1.New)
+				key := pbkdf2.Key([]byte("fly"), []byte("asche910"), 1024, 32, sha1.New)
 				block, _ := kcp.NewAESBlockCrypt(key)
 				session, err := kcp.DialWithOptions(serverAddr, block, 10, 3)
 				if err != nil {
 					logger.Println("connect targetServer failed! ", err)
 					return
 				}
-				go relay.TCPToUDP(session, con)
-				relay.UDPToTCP(con, session)
+				go TCPToUDP(session, con)
+				UDPToTCP(con, session)
 			}
 		}()
 	}
 }
 
 func Socks5ForServerByUDP(localPort string) {
-	key := pbkdf2.Key([]byte("flynet"), []byte("asche910"), 1024, 32, sha1.New)
+	key := pbkdf2.Key([]byte("fly"), []byte("asche910"), 1024, 32, sha1.New)
 	block, _ := kcp.NewAESBlockCrypt(key)
 	if listener, err := kcp.ListenWithOptions(":"+localPort, block, 10, 3); err == nil {
 		logger.Printf("server listent udp at %s\n", localPort)
@@ -219,8 +225,8 @@ func Socks5ForServerByUDP(localPort string) {
 						logger.Println("response to client failed! ", err)
 						return
 					}
-					go relay.UDPToTCP(server, con)
-					relay.TCPToUDP(con, server)
+					go UDPToTCP(server, con)
+					TCPToUDP(con, server)
 				} else {
 					logger.Println("unrecognized protocol!")
 					return
@@ -234,7 +240,6 @@ func Socks5ForServerByUDP(localPort string) {
 
 // parse socks5 request for target host and port
 func parseSocksRequest(data []byte, n int) (string, string) {
-	// 解析并请求内容
 	var host, port string
 	switch data[3] {
 	case 0x01: // IPV4 address
