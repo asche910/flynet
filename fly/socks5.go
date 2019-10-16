@@ -2,7 +2,6 @@ package fly
 
 import (
 	"crypto/sha1"
-	"fmt"
 	"github.com/xtaci/kcp-go"
 	"golang.org/x/crypto/pbkdf2"
 	"io"
@@ -67,7 +66,7 @@ func handleClient(client net.Conn) {
 	}
 }
 
-func Socks5ForClientByTCP(localPort, serverAddr string) {
+func Socks5ForClientByTCP(localPort, serverAddr, method, key string) {
 	listener := ListenTCP(localPort)
 	for {
 		client, err := listener.Accept()
@@ -104,7 +103,7 @@ func Socks5ForClientByTCP(localPort, serverAddr string) {
 				//        | 1  |  1  | X'00' |  1   | Variable |    2     |
 				//        +----+-----+-------+------+----------+----------+
 				//
-				server := DialWithAddr(serverAddr, buff[:n])
+				server := DialWithAddr(serverAddr, method, key, buff[:n])
 				if server == nil {
 					return
 				}
@@ -116,22 +115,26 @@ func Socks5ForClientByTCP(localPort, serverAddr string) {
 	}
 }
 
-func Socks5ForServerByTCP(localPort string) {
+func Socks5ForServerByTCP(localPort, method, key string) {
 	listener := ListenTCP(localPort)
 	for {
 		logger.Println("waiting...")
 		client, err := listener.Accept()
 		if err != nil {
-			fmt.Println("server accept failed!", err)
+			logger.Println("server accept failed!", err)
 			continue
 		}
 		go func() {
 			buff := make([]byte, 1024)
-			conn := NewConn(client, NewCipherInstance())
+			conn := NewConn(client, NewCipherInstance(key, method))
 			n, err := conn.Read(buff)
+			if err != nil {
+				logger.Println("read target address failed!", err)
+				return
+			}
 
 			host, port := parseSocksRequest(buff[:n], n)
-			fmt.Printf("target server %s:%s\n", host, port)
+			logger.Printf("target server %s:%s\n", host, port)
 
 			// dial the target server
 			server, err := net.Dial("tcp", net.JoinHostPort(host, port))

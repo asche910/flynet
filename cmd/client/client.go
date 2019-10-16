@@ -30,7 +30,7 @@ func main() {
 	case 2:
 		flyClient.LocalSocks5Proxy(flyClient.Ports[0])
 	case 3:
-		flyClient.Socks5ProxyForTCP(flyClient.Ports[0], flyClient.ServerAddr)
+		flyClient.Socks5ProxyForTCP(flyClient.Ports[0], flyClient.ServerAddr, flyClient.Method, flyClient.Password)
 	case 4:
 		flyClient.Socks5ProxyForUDP(flyClient.Ports[0], flyClient.ServerAddr)
 	case 5:
@@ -48,8 +48,12 @@ func printHelp() {
                     'socks5-tcp', 'socks5-udp', 'forward']
   -L, --listen      choose which port(s) to listen or forward
   -S, --server      the server address client connect to
+  -m, --method      choose a encrypt method, which must be one of ['aes-128-cfb','aes-192-cfb',
+                    'aes-256-cfb', 'aes-128-ctr', 'aes-192-ctr', 'aes-256-ctr', 'rc4-md5', 
+                    'rc4-md5-6', 'chacha20', 'chacha20-ietf'], default is 'aes-256-cfb'
+  -P, --password    password of server
   -V, --verbose     output detail info
-  -l, --logs         output detail info to logs file
+  -l, --logs        output detail info to logs file
   -H, --help        show detail usage
 
 Mail bug reports and suggestions to <asche910@gmail.com>
@@ -107,6 +111,24 @@ func parseArgs(args []string) {
 			parseArgs(args[2:])
 		} else {
 			fmt.Println("fly: no correct serverAddr found!")
+			printHelp()
+			os.Exit(1)
+		}
+	case "-m", "--method":
+		if len(args) > 1 && !strings.HasPrefix(args[1], "-") {
+			flyClient.Method = args[1]
+			parseArgs(args[2:])
+		} else {
+			fmt.Println("fly: no password found!")
+			printHelp()
+			os.Exit(1)
+		}
+	case "--password", "-P":
+		if len(args) > 1 && !strings.HasPrefix(args[1], "-") {
+			flyClient.Password = args[1]
+			parseArgs(args[2:])
+		} else {
+			fmt.Println("fly: no password found!")
 			printHelp()
 			os.Exit(1)
 		}

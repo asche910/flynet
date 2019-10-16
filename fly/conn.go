@@ -17,13 +17,13 @@ func NewConn(con net.Conn, cipher *Cipher) *Conn {
 }
 
 // dial server and send request addr of client
-func DialWithAddr(server string, addr []byte) *Conn {
+func DialWithAddr(server, method, key string, addr []byte) *Conn {
 	conn, err := net.Dial("tcp", server)
 	if err != nil {
 		logger.Println("Dial server failed!", err)
 		return nil
 	}
-	newConn := NewConn(conn, NewCipherInstance())
+	newConn := NewConn(conn, NewCipherInstance(key, method))
 	if _, err := newConn.Write(addr); err != nil {
 		logger.Println("write addr to server failed!", err)
 		return nil

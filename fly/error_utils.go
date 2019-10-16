@@ -10,7 +10,6 @@ var logger *log.Logger
 
 func InitLog()  {
 	logger = logs.GetLogger()
-
 }
 
 // just check error and print if err is not nil

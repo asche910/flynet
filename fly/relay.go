@@ -48,10 +48,10 @@ func RelayTraffic(dst, src net.Conn) {
 			fmt.Println(err)
 			break
 		}
-		fmt.Println("Read", n)
+		//logger.Println("Read", n)
 		if n > 0 {
 			if n, err = dst.Write(buff[:n]); err != nil {
-				fmt.Println(err)
+				logger.Println(err)
 				break
 			}
 		}
