@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"github.com/asche910/flynet/client"
 	"github.com/asche910/flynet/fly"
-	"github.com/asche910/flynet/log"
-	log2 "log"
+	"github.com/asche910/flynet/logs"
+	"log"
 	"os"
 	"strings"
 )
 
 var (
-	logger    *log2.Logger
+	logger    *log.Logger
 	flyClient = client.FlyClient{}
 )
 
@@ -49,7 +49,7 @@ func printHelp() {
   -L, --listen      choose which port(s) to listen or forward
   -S, --server      the server address client connect to
   -V, --verbose     output detail info
-  -l, --log         output detail info to log file
+  -l, --logs         output detail info to logs file
   -H, --help        show detail usage
 
 Mail bug reports and suggestions to <asche910@gmail.com>
@@ -111,10 +111,10 @@ func parseArgs(args []string) {
 			os.Exit(1)
 		}
 	case "--verbose", "-V":
-		log.EnableDebug(true)
+		logs.EnableDebug(true)
 		parseArgs(args[1:])
-	case "--log", "-l":
-		log.EnableLog(true)
+	case "--logs", "-l":
+		logs.EnableLog(true)
 		parseArgs(args[1:])
 	case "--help", "-H":
 		printHelp()
@@ -149,8 +149,6 @@ func checkArgs() {
 }
 
 func initLog() {
-	log.InitLog()
 	fly.InitLog()
-	fly.InitLog()
-	logger = log.GetLogger()
+	logger = logs.GetLogger()
 }

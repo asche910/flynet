@@ -1,4 +1,4 @@
-package log
+package logs
 
 import (
 	"io"
@@ -9,12 +9,8 @@ import (
 var (
 	logFlag   = false
 	debugFlag = false
-	logger    *log.Logger
+	logger *log.Logger
 )
-
-func InitLog() {
-	logger = GetLogger()
-}
 
 func EnableLog(flag bool) {
 	logFlag = flag
@@ -26,10 +22,13 @@ func EnableDebug(flag bool) {
 
 // return a logger
 func GetLogger() *log.Logger {
+	if logger != nil {
+		return logger
+	}
 	var f *os.File
 	var err error
 	if logFlag {
-		f, err = os.OpenFile("fly.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+		f, err = os.OpenFile("fly.logs", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 		if err != nil {
 			log.Println("Create logger file failed!", err)
 		}
@@ -48,7 +47,7 @@ func GetLogger() *log.Logger {
 
 	targetWriter := io.MultiWriter(writers...)
 	// cancel log.Lshortfile
-	logg := log.New(targetWriter, "", log.Ldate|log.Ltime)
-	logger = logg
-	return logg
+	logs := log.New(targetWriter, "", log.Ldate|log.Ltime)
+	logger = logs
+	return logs
 }

@@ -3,15 +3,15 @@ package main
 import (
 	"fmt"
 	"github.com/asche910/flynet/fly"
-	"github.com/asche910/flynet/log"
+	"github.com/asche910/flynet/logs"
 	"github.com/asche910/flynet/server"
-	log2 "log"
+	"log"
 	"os"
 	"strings"
 )
 
 var (
-	logger    *log2.Logger
+	logger    *log.Logger
 	flyServer = server.FlyServer{}
 	MODE_MAP  = map[int]string{1: "http", 2: "socks5", 3: "socks5-tcp", 4: "socks5-udp", 5: "forward"}
 )
@@ -49,7 +49,7 @@ func printHelp() {
                     'socks5-tcp', 'socks5-udp', 'forward']
   -L, --listen      choose which port(s) to listen or forward
   -V, --verbose     output detail info
-  -l, --log         output detail info to log file
+  -l, --logs         output detail info to logs file
   -H, --help        show detail usage
 
 Mail bug reports and suggestions to <asche910@gmail.com>
@@ -102,10 +102,10 @@ func parseArgs(args []string) {
 			os.Exit(1)
 		}
 	case "--verbose", "-V":
-		log.EnableDebug(true)
+		logs.EnableDebug(true)
 		parseArgs(args[1:])
-	case "--log", "-l":
-		log.EnableLog(true)
+	case "--logs", "-l":
+		logs.EnableLog(true)
 		parseArgs(args[1:])
 	case "--help", "-H":
 		printHelp()
@@ -139,8 +139,6 @@ func checkArgs() {
 }
 
 func initLog() {
-	log.InitLog()
 	fly.InitLog()
-	fly.InitLog()
-	logger = log.GetLogger()
+	logger = logs.GetLogger()
 }

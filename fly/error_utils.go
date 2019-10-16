@@ -2,14 +2,15 @@ package fly
 
 import (
 	"fmt"
-	log2 "github.com/asche910/flynet/log"
+	"github.com/asche910/flynet/logs"
 	"log"
 )
 
 var logger *log.Logger
 
 func InitLog()  {
-	logger = log2.GetLogger()
+	logger = logs.GetLogger()
+
 }
 
 // just check error and print if err is not nil

@@ -14,7 +14,7 @@ func TCPToUDP(session *kcp.UDPSession, conn net.Conn) {
 			logger.Println(err)
 			break
 		}
-		//log.Printf("TCPToUDP read %d byte\n", n)
+		//logs.Printf("TCPToUDP read %d byte\n", n)
 		n, err = session.Write(buff[:n])
 		if err != nil {
 			logger.Println(err)
@@ -31,7 +31,7 @@ func UDPToTCP(conn net.Conn, session *kcp.UDPSession) {
 			logger.Println(err)
 			break
 		}
-		//log.Printf("UDPToTCP read %d byte\n", n)
+		//logs.Printf("UDPToTCP read %d byte\n", n)
 		n, err = conn.Write(buff[:n])
 		if err != nil {
 			logger.Println(err)
