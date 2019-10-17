@@ -28,7 +28,7 @@ func GetLogger() *log.Logger {
 	var f *os.File
 	var err error
 	if logFlag {
-		f, err = os.OpenFile("fly.logs", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+		f, err = os.OpenFile("flynet.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 		if err != nil {
 			log.Println("Create logger file failed!", err)
 		}

@@ -53,7 +53,7 @@ func printHelp() {
                     'rc4-md5-6', 'chacha20', 'chacha20-ietf'], default is 'aes-256-cfb'
   -P, --password    password for client connecting
   -V, --verbose     output detail info
-  -l, --logs        output detail info to logs file
+  -l, --log         output detail info to log file
   -H, --help        show detail usage
 
 Mail bug reports and suggestions to <asche910@gmail.com>

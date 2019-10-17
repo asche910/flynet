@@ -140,7 +140,7 @@ func Socks5ForServerByTCP(localPort, method, key string) {
 
 			host, port := parseSocksRequest(buff[:n], n)
 			//logger.Printf("target server ------\n%s:%s\n------\n%d\n+++++++\n", host, port, buff[:n])
-			logger.Printf("target server ------\n%s:%s\n------\n", host, port)
+			logger.Printf("target server ---> %s:%s <---\n", host, port)
 
 			// dial the target server
 			server, err := net.Dial("tcp", net.JoinHostPort(host, port))

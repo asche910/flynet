@@ -3,6 +3,7 @@ package fly
 import (
 	"fmt"
 	"github.com/xtaci/kcp-go"
+	"io"
 	"net"
 )
 
@@ -45,7 +46,9 @@ func RelayTraffic(dst, src net.Conn) {
 	for {
 		n, err := src.Read(buff)
 		if err != nil {
-			fmt.Println(err)
+			if err != io.EOF {
+				fmt.Println(err)
+			}
 			break
 		}
 		//logger.Println("Read", n)
