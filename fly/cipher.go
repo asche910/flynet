@@ -77,7 +77,11 @@ func NewCipherInstance(secretKey, method string) *Cipher {
 	entity := cipherMap[method]
 	if entity == nil {
 		entity = cipherMap["aes-256-cfb"]
+		logger.Println("encrypt method: aes-256-cfb")
+	}else {
+		logger.Println("encrypt method:", method)
 	}
+
 	key := genKey(secretKey, entity.keyLen)
 	newIV := IV[:entity.ivLen]
 	enc := entity.newStream(key, newIV, ENC)
@@ -88,7 +92,7 @@ func NewCipherInstance(secretKey, method string) *Cipher {
 func newAESCFBStream(key, iv []byte, eod EncOrDec) cipher.Stream {
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		logger.Println("aes.NewCipher failed!", err)
+		logger.Println("aes.NewCipher failed --->", err)
 		return nil
 	}
 	if eod == ENC {
@@ -103,7 +107,7 @@ func newAESCFBStream(key, iv []byte, eod EncOrDec) cipher.Stream {
 func newAESCTRStream(key, iv []byte, eod EncOrDec) cipher.Stream {
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		logger.Println("aes.NewCipher failed!", err)
+		logger.Println("aes.NewCipher failed --->", err)
 		return nil
 	}
 	return cipher.NewCTR(block, iv)
@@ -112,7 +116,7 @@ func newAESCTRStream(key, iv []byte, eod EncOrDec) cipher.Stream {
 func newChaCha20Stream(key, iv []byte, eod EncOrDec) cipher.Stream {
 	stream, err := chacha20.NewCipher(iv, key)
 	if err != nil {
-		logger.Println("chacha20.NewCipher failed!", err)
+		logger.Println("chacha20.NewCipher failed --->", err)
 		return nil
 	}
 	return stream
@@ -125,7 +129,7 @@ func newRC4MD5Stream(key, iv []byte, eod EncOrDec) cipher.Stream {
 	rc4key := hs.Sum(nil)
 	stream, err := rc4.NewCipher(rc4key)
 	if err != nil {
-		logger.Println("rc4.NewCipher failed!", err)
+		logger.Println("rc4.NewCipher failed --->", err)
 		return nil
 	}
 	return stream

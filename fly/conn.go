@@ -20,12 +20,12 @@ func NewConn(con net.Conn, cipher *Cipher) *Conn {
 func DialWithAddr(server, method, key string, addr []byte) *Conn {
 	conn, err := net.Dial("tcp", server)
 	if err != nil {
-		logger.Println("Dial server failed!", err)
+		logger.Println("Dial server failed --->", err)
 		return nil
 	}
 	newConn := NewConn(conn, NewCipherInstance(key, method))
 	if _, err := newConn.Write(addr); err != nil {
-		logger.Println("write addr to server failed!", err)
+		logger.Println("write addr to server failed --->", err)
 		return nil
 	}
 	return newConn

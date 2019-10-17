@@ -39,7 +39,7 @@ func handleClientRequest(client net.Conn) {
 
 	if index == -1 {
 		index = len(b) - 1
-		logger.Println("parse request error:", string(b[:]))
+		logger.Println("parse request error --->", string(b[:]))
 	}
 	var method, host, address string
 	_, _ = fmt.Sscanf(string(b[:]), "%s%s", &method, &host)

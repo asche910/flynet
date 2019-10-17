@@ -71,29 +71,34 @@ func Socks5ForClientByTCP(localPort, serverAddr, method, key string) {
 	for {
 		client, err := listener.Accept()
 		if err != nil {
-			logger.Println("accept failed!")
+			logger.Println("accept failed --->", err)
 			continue
 		}
 		logger.Println("client accepted!")
 
 		go func() {
-			buff := make([]byte, 259)
+			buff := make([]byte, 1024)
 			n, err := client.Read(buff)
 			if err != nil {
-				logger.Println("read handshake request failed!", err)
+				logger.Println("read handshake request failed --->", err)
+				return
 			}
 			if buff[0] == 0x05 {
 				if n, err = client.Write([]byte{0x05, 0x00}); err != nil {
-					logger.Println("write handshake response failed!", err)
+					logger.Println("write handshake response failed --->", err)
+					return
 				}
 
 				// read detail request
+				//if n, err = client.Read(buff); err != nil {
 				if n, err = io.ReadAtLeast(client, buff, 5); err != nil {
-					logger.Println("read client quest failed!", err)
+					logger.Println("read client quest failed --->", err)
+					return
 				}
 				replyBy := []byte{0x05, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 				if _, err = client.Write(replyBy); err != nil {
-					logger.Println("write 'request success' failed!", err)
+					logger.Println("write 'request success' failed --->", err)
+					return
 				}
 
 				//
@@ -121,7 +126,7 @@ func Socks5ForServerByTCP(localPort, method, key string) {
 		logger.Println("waiting...")
 		client, err := listener.Accept()
 		if err != nil {
-			logger.Println("server accept failed!", err)
+			logger.Println("server accept failed --->", err)
 			continue
 		}
 		go func() {
@@ -129,17 +134,18 @@ func Socks5ForServerByTCP(localPort, method, key string) {
 			conn := NewConn(client, NewCipherInstance(key, method))
 			n, err := conn.Read(buff)
 			if err != nil {
-				logger.Println("read target address failed!", err)
+				logger.Println("read target address failed --->", err)
 				return
 			}
 
 			host, port := parseSocksRequest(buff[:n], n)
-			logger.Printf("target server %s:%s\n", host, port)
+			//logger.Printf("target server ------\n%s:%s\n------\n%d\n+++++++\n", host, port, buff[:n])
+			logger.Printf("target server ------\n%s:%s\n------\n", host, port)
 
 			// dial the target server
 			server, err := net.Dial("tcp", net.JoinHostPort(host, port))
 			if err != nil {
-				logger.Println("dial target server failed!", err)
+				logger.Println("dial target server failed --->", err)
 				return
 			}
 			go RelayTraffic(server, conn)
@@ -240,15 +246,23 @@ func Socks5ForServerByUDP(localPort string) {
 
 // parse socks5 request for target host and port
 func parseSocksRequest(data []byte, n int) (string, string) {
+	// TODO sometimes there are some nums, such as '22 3 1 2 0 1 0 1 252...' after port. why?
 	var host, port string
+	var p1, p2 byte
 	switch data[3] {
 	case 0x01: // IPV4 address
 		host = net.IPv4(data[4], data[5], data[6], data[7]).String()
+		p1 = data[8]
+		p2 = data[9]
 	case 0x03: // domain
-		host = string(data[5 : n-2]) // data[4] stands for the length of domain
+		host = string(data[5 : 5+data[4]]) // data[4] stands for the length of domain
+		p1 = data[data[4]+5]
+		p2 = data[data[4]+6]
 	case 0x04: // IPV6 address
 		host = net.IP{data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19]}.String()
+		p1 = data[20]
+		p2 = data[21]
 	}
-	port = strconv.Itoa(int(data[n-2])<<8 | int(data[n-1]))
+	port = strconv.Itoa(int(p1)<<8 | int(p2))
 	return host, port
 }
