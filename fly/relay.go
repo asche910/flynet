@@ -1,7 +1,6 @@
 package fly
 
 import (
-	"fmt"
 	"github.com/xtaci/kcp-go"
 	"io"
 	"net"

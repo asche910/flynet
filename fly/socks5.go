@@ -1,6 +1,7 @@
 package fly
 
 import (
+	"bytes"
 	"crypto/sha1"
 	"fmt"
 	"github.com/xtaci/kcp-go"
@@ -72,6 +73,13 @@ func handleClient(client net.Conn) {
 
 func Socks5ForClientByTCP(localPort, serverAddr, method, key string) {
 	listener := ListenTCP(localPort)
+
+	cipherEntity := CipherMap[method]
+	if cipherEntity == nil {
+		logger.Println("encrypt method: aes-256-cfb")
+	}else {
+		logger.Println("encrypt method:", method)
+	}
 	for {
 		client, err := listener.Accept()
 		if err != nil {
@@ -119,6 +127,8 @@ func Socks5ForClientByTCP(localPort, serverAddr, method, key string) {
 
 				go RelayTraffic(server, client)
 				RelayTraffic(client, server)
+			}else {
+				handlePACRequest(client, buff[:n], localPort)
 			}
 		}()
 	}
@@ -126,6 +136,13 @@ func Socks5ForClientByTCP(localPort, serverAddr, method, key string) {
 
 func Socks5ForServerByTCP(localPort, method, key string) {
 	listener := ListenTCP(localPort)
+
+	cipherEntity := CipherMap[method]
+	if cipherEntity == nil {
+		logger.Println("encrypt method: aes-256-cfb")
+	}else {
+		logger.Println("encrypt method:", method)
+	}
 	for {
 		logger.Println("waiting...")
 		client, err := listener.Accept()
@@ -140,14 +157,14 @@ func Socks5ForServerByTCP(localPort, method, key string) {
 			if err != nil {
 				logger.Println("read target address failed --->", err)
 				return
-			}else if n < 7 {
+			} else if n < 7 {
 				logger.Println("read error of request length --->", buff[:n])
 				return
 			}
 
 			host, port := parseSocksRequest(buff[:n], n)
 			//logger.Printf("target server ------\n%s:%s\n------\n%d\n+++++++\n", host, port, buff[:n])
-			logger.Printf("target server ---> %s:%s <---\n", host, port)
+			logger.Printf("target server: %s:%s\n", host, port)
 
 			// dial the target server
 			server, err := net.Dial("tcp", net.JoinHostPort(host, port))
@@ -216,7 +233,7 @@ func Socks5ForServerByUDP(localPort string) {
 				if err != nil {
 					logger.Println("read target address failed --->", err)
 					return
-				}else if n < 7 {
+				} else if n < 7 {
 					logger.Println("read error of request length --->", data[:n])
 					return
 				}
@@ -275,4 +292,23 @@ func parseSocksRequest(data []byte, n int) (string, string) {
 	}
 	port = strconv.Itoa(int(p1)<<8 | int(p2))
 	return host, port
+}
+
+func handlePACRequest(conn net.Conn, buff []byte, port string)  {
+	if bytes.Contains(buff[:], []byte("flynet.pac HTTP")) {
+		fileBuff, size := GetPAC()
+		// replace the socks5 port of pac file with the port user choose
+		fileBuff = bytes.Replace(fileBuff[:size], []byte("SOCKS5 127.0.0.1:1080"), []byte("SOCKS5 127.0.0.1:" + port), 1)
+
+		_, _ = conn.Write([]byte(fmt.Sprintf("HTTP/1.1 200 OK\r\n"+
+			"Content-Type: application/x-ns-proxy-autoconfig\r\n"+
+			"Server: flynet\r\nContent-Length: %d\r\n\r\n", size)))
+		_, _ = conn.Write(fileBuff[:size])
+	}else {
+		msg := "hello,flynet!"
+		_, _ = conn.Write([]byte(fmt.Sprintf("HTTP/1.1 200 OK\r\n"+
+			"Content-Type: text/html; charset=utf-8\r\n"+
+			"Server: flynet\r\nContent-Length: %d\r\n\r\n%s", len(msg), msg)))
+	}
+	conn.Close()
 }

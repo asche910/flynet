@@ -23,7 +23,7 @@ var (
 	IV = []byte{0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f}
 )
 
-var cipherMap = map[string]*cipherEntity{
+var CipherMap = map[string]*cipherEntity{
 	"aes-128-cfb":   {16, 16, newAESCFBStream},
 	"aes-192-cfb":   {24, 16, newAESCFBStream},
 	"aes-256-cfb":   {32, 16, newAESCFBStream},
@@ -74,12 +74,9 @@ func NewCipherInstance(secretKey, method string) *Cipher {
 	if secretKey == "" {
 		secretKey = key
 	}
-	entity := cipherMap[method]
+	entity := CipherMap[method]
 	if entity == nil {
-		entity = cipherMap["aes-256-cfb"]
-		logger.Println("encrypt method: aes-256-cfb")
-	}else {
-		logger.Println("encrypt method:", method)
+		entity = CipherMap["aes-256-cfb"]
 	}
 
 	key := genKey(secretKey, entity.keyLen)
