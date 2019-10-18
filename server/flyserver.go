@@ -7,12 +7,13 @@ import (
 
 type FlyServer struct {
 	Mode      int // which function to use, [1:'http', 2:'socks5', 3:'socks5-tcp', 4:'socks5-udp', 5:'forward']
-	localHost string
+	//localHost string
 	Ports     []string // ports[0] stands for the listening port; others are for reserve
 	Method string
 	Password string
-	protocol  string   // tcp or udp protocol
-
+	//protocol  string   // tcp or udp protocol
+	Verbose    bool
+	LogPath    string
 	clients map[string]net.Conn
 }
 

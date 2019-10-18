@@ -26,7 +26,7 @@ func ListenUDP(localPort string) net.Listener {
 	return listener
 }
 
-func CheckPort(port string) string {
+func CheckPort(port string) {
 	portNum, err := strconv.Atoi(port)
 	if err != nil {
 		logger.Fatalln("port is not a number --->", err)
@@ -34,5 +34,4 @@ func CheckPort(port string) string {
 	if portNum < 1 || portNum > 65535 {
 		logger.Fatalln("port should be in range [1,65536)")
 	}
-	return port
 }

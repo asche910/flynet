@@ -4,12 +4,15 @@ import "github.com/asche910/flynet/fly"
 
 type FlyClient struct {
 	Mode int
-	localhost string
+	//localhost string
 	Ports []string // ports[0] stands for the listening port; others are for reserve
 	Method string
 	Password string
-	protocol string // tcp or udp protocol
+	//protocol string // tcp or udp protocol
 	ServerAddr string
+	PACMode    bool
+	Verbose    bool
+	LogPath    string
 
 }
 
