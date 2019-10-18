@@ -2,6 +2,7 @@ package fly
 
 import (
 	"crypto/sha1"
+	"fmt"
 	"github.com/xtaci/kcp-go"
 	"golang.org/x/crypto/pbkdf2"
 	"io"
@@ -42,7 +43,10 @@ func handleClient(client net.Conn) {
 		// read the detail request from client
 		n, err = client.Read(data[:])
 		if err != nil {
-			logger.Println("read from client failed!")
+			logger.Println("read from client failed --->", err)
+			return
+		} else if n < 7 {
+			logger.Println("read error of request length --->", data[:n])
 			return
 		}
 
@@ -136,6 +140,9 @@ func Socks5ForServerByTCP(localPort, method, key string) {
 			if err != nil {
 				logger.Println("read target address failed --->", err)
 				return
+			}else if n < 7 {
+				logger.Println("read error of request length --->", buff[:n])
+				return
 			}
 
 			host, port := parseSocksRequest(buff[:n], n)
@@ -159,16 +166,16 @@ func Socks5ForClientByUDP(localPort, serverAddr string) {
 	for {
 		con, err := listener.Accept()
 		if err != nil {
-			logger.Println("accept error: ", err)
+			logger.Println("accept error --->", err)
 			continue
 		}
-		logger.Println("client accepted!")
+		logger.Println("client accepted.")
 
 		go func() {
 			var b [1024] byte
 			_, err := con.Read(b[:])
 			if err != nil {
-				logger.Println("read error!")
+				logger.Println("read error --->", err)
 				return
 			}
 			if b[0] == 0x05 {
@@ -183,7 +190,7 @@ func Socks5ForClientByUDP(localPort, serverAddr string) {
 				block, _ := kcp.NewAESBlockCrypt(key)
 				session, err := kcp.DialWithOptions(serverAddr, block, 10, 3)
 				if err != nil {
-					logger.Println("connect targetServer failed! ", err)
+					logger.Println("connect targetServer failed --->", err)
 					return
 				}
 				go TCPToUDP(session, con)
@@ -207,7 +214,10 @@ func Socks5ForServerByUDP(localPort string) {
 				data := make([]byte, 1024)
 				n, err := con.Read(data)
 				if err != nil {
-					logger.Println(err)
+					logger.Println("read target address failed --->", err)
+					return
+				}else if n < 7 {
+					logger.Println("read error of request length --->", data[:n])
 					return
 				}
 				//logger.Println(string(data[:n]))

@@ -15,7 +15,8 @@ func StartPAC() {
 		if err != nil {
 			fmt.Println(err)
 			// run from cmd/client/
-			file, _ = os.Open("../../flynet.pac")
+			file, _ = os.Open("../flynet.pac")
+			//file, _ = os.Open("../../flynet.pac")
 		}
 		w.Header().Set("Content-Type", "application/x-ns-proxy-autoconfig")
 		io.Copy(w, file)
