@@ -1,4 +1,4 @@
-package logs
+package fly
 
 import (
 	"io"
@@ -9,8 +9,12 @@ import (
 var (
 	logFlag   = false
 	debugFlag = false
-	logger *log.Logger
+	logger    *log.Logger
 )
+
+func InitLog() {
+	logger = GetLogger()
+}
 
 func EnableLog(flag bool) {
 	logFlag = flag
@@ -48,6 +52,5 @@ func GetLogger() *log.Logger {
 	targetWriter := io.MultiWriter(writers...)
 	// cancel log.Lshortfile
 	logs := log.New(targetWriter, "", log.Ldate|log.Ltime)
-	logger = logs
 	return logs
 }

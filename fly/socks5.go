@@ -22,11 +22,11 @@ func StartSocks5(port string) {
 		}
 		logger.Println("client accepted!")
 
-		go handleClient(client)
+		go handleLocalClient(client)
 	}
 }
 
-func handleClient(client net.Conn) {
+func handleLocalClient(client net.Conn) {
 	data := make([]byte, 1024)
 	n, err := client.Read(data[:])
 	if err != nil {
@@ -304,6 +304,8 @@ func handlePACRequest(conn net.Conn, buff []byte, port string)  {
 			"Content-Type: application/x-ns-proxy-autoconfig\r\n"+
 			"Server: flynet\r\nContent-Length: %d\r\n\r\n", size)))
 		_, _ = conn.Write(fileBuff[:size])
+
+		logger.Printf("pac mode is on, the url is: http://localhost:%s/flynet.pac\n", port)
 	}else {
 		msg := "hello,flynet!"
 		_, _ = conn.Write([]byte(fmt.Sprintf("HTTP/1.1 200 OK\r\n"+

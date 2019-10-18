@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/asche910/flynet/client"
 	"github.com/asche910/flynet/fly"
-	"github.com/asche910/flynet/logs"
 	"log"
 	"os"
 	"strings"
@@ -133,10 +132,10 @@ func parseArgs(args []string) {
 			os.Exit(1)
 		}
 	case "--verbose", "-V":
-		logs.EnableDebug(true)
+		fly.EnableDebug(true)
 		parseArgs(args[1:])
 	case "--logs", "-l":
-		logs.EnableLog(true)
+		fly.EnableLog(true)
 		parseArgs(args[1:])
 	case "--help", "-H":
 		printHelp()
@@ -172,5 +171,5 @@ func checkArgs() {
 
 func initLog() {
 	fly.InitLog()
-	logger = logs.GetLogger()
+	logger = fly.GetLogger()
 }

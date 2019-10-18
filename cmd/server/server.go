@@ -3,15 +3,12 @@ package main
 import (
 	"fmt"
 	"github.com/asche910/flynet/fly"
-	"github.com/asche910/flynet/logs"
 	"github.com/asche910/flynet/server"
-	"log"
 	"os"
 	"strings"
 )
 
 var (
-	logger    *log.Logger
 	flyServer = server.FlyServer{}
 	MODE_MAP  = map[int]string{1: "http", 2: "socks5", 3: "socks5-tcp", 4: "socks5-udp", 5: "forward"}
 )
@@ -124,10 +121,10 @@ func parseArgs(args []string) {
 			os.Exit(1)
 		}
 	case "--verbose", "-V":
-		logs.EnableDebug(true)
+		fly.EnableDebug(true)
 		parseArgs(args[1:])
 	case "--logs", "-l":
-		logs.EnableLog(true)
+		fly.EnableLog(true)
 		parseArgs(args[1:])
 	case "--help", "-H":
 		printHelp()
@@ -162,5 +159,4 @@ func checkArgs() {
 
 func initLog() {
 	fly.InitLog()
-	logger = logs.GetLogger()
 }

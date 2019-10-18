@@ -19,11 +19,11 @@ func StartHttp(port string) {
 			continue
 		}
 		logger.Println("accept success!")
-		go handleClientRequest(client)
+		go handleHttpClient(client)
 	}
 }
 
-func handleClientRequest(client net.Conn) {
+func handleHttpClient(client net.Conn) {
 	if client == nil {
 		return
 	}
