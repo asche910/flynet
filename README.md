@@ -5,8 +5,8 @@
 
 * [Http proxy](#Http-Proxy)
 * [Local Socks5 proxy](#Local-Socks5-Proxy)
-* [C/S mode of Socks5 proxy by TCP](#C/S-mode-of-Socks5-proxy-by-TCP)
-* [C/S mode of Socks5 proxy by UDP](#C/S-mode-of-Socks5-proxy-by-UDP)
+* [C/S mode of Socks5 proxy by TCP](#CS-mode-of-Socks5-proxy-by-TCP)
+* [C/S mode of Socks5 proxy by UDP](#CS-mode-of-Socks5-proxy-by-UDP)
 * [NAT traversal](#NAT-traversal)
 * ...
 

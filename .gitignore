@@ -1,5 +1,6 @@
 /.idea
 /test.go
+/flynet.pac
 /cmd/client/client.exe
 /cmd/client/auto-build.bat
 /cmd/server/server.exe
