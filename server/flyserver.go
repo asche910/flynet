@@ -12,8 +12,6 @@ type FlyServer struct {
 	Method string
 	Password string
 	//protocol  string   // tcp or udp protocol
-	Verbose    bool
-	LogPath    string
 	clients map[string]net.Conn
 }
 

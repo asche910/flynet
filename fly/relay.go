@@ -46,14 +46,14 @@ func RelayTraffic(dst, src net.Conn) {
 		n, err := src.Read(buff)
 		if err != nil {
 			if err != io.EOF {
-				logger.Println(err)
+				logger.Println("RelayTraffic read --->", err)
 			}
 			break
 		}
 		//logger.Println("Read", n)
 		if n > 0 {
 			if n, err = dst.Write(buff[:n]); err != nil {
-				logger.Println(err)
+				logger.Println("RelayTraffic write --->", err)
 				break
 			}
 		}

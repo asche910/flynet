@@ -11,9 +11,6 @@ type FlyClient struct {
 	//protocol string // tcp or udp protocol
 	ServerAddr string
 	PACMode    bool
-	Verbose    bool
-	LogPath    string
-
 }
 
 func (client *FlyClient) LocalSocks5Proxy(port string) {
@@ -24,8 +21,8 @@ func (client *FlyClient) LocalHttpProxy(port string) {
 	fly.StartHttp(port)
 }
 
-func (client *FlyClient) Socks5ProxyForTCP(localPort, serverAddr, method, key string) {
-	fly.Socks5ForClientByTCP(localPort, serverAddr, method, key)
+func (client *FlyClient) Socks5ProxyForTCP(localPort, serverAddr, method, key string, pacMode bool) {
+	fly.Socks5ForClientByTCP(localPort, serverAddr, method, key, pacMode)
 }
 
 func (client *FlyClient) Socks5ProxyForUDP(localPort, serverAddr string) {

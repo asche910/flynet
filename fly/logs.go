@@ -10,6 +10,7 @@ var (
 	logFlag   = false
 	debugFlag = false
 	logger    *log.Logger
+	logName = "flynet.log"
 )
 
 func InitLog() {
@@ -24,6 +25,11 @@ func EnableDebug(flag bool) {
 	debugFlag = flag
 }
 
+// set log file name, which can include absolute path
+func SetLogName(name string)  {
+	logName = name
+}
+
 // return a logger
 func GetLogger() *log.Logger {
 	if logger != nil {
@@ -32,9 +38,9 @@ func GetLogger() *log.Logger {
 	var f *os.File
 	var err error
 	if logFlag {
-		f, err = os.OpenFile("flynet.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+		f, err = os.OpenFile(logName, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 		if err != nil {
-			log.Println("Create logger file failed!", err)
+			log.Println("create or open log file failed --->", err)
 		}
 	}
 	var writers []io.Writer

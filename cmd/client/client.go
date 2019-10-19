@@ -29,7 +29,7 @@ func main() {
 	case 2:
 		flyClient.LocalSocks5Proxy(flyClient.Ports[0])
 	case 3:
-		flyClient.Socks5ProxyForTCP(flyClient.Ports[0], flyClient.ServerAddr, flyClient.Method, flyClient.Password)
+		flyClient.Socks5ProxyForTCP(flyClient.Ports[0], flyClient.ServerAddr, flyClient.Method, flyClient.Password, flyClient.PACMode)
 	case 4:
 		flyClient.Socks5ProxyForUDP(flyClient.Ports[0], flyClient.ServerAddr)
 	case 5:
@@ -51,8 +51,11 @@ func printHelp() {
                     'aes-256-cfb', 'aes-128-ctr', 'aes-192-ctr', 'aes-256-ctr', 'rc4-md5', 
                     'rc4-md5-6', 'chacha20', 'chacha20-ietf'], default is 'aes-256-cfb'
   -P, --password    password of server
+  -p, --pac         having this flag, pac-mode will open
+  -C, --config      read from config file
   -V, --verbose     output detail info
-  -l, --log        output detail info to log file
+  -l, --log         output detail info to log file, which if not indicated "flynet.log" will 
+                    be default
   -H, --help        show detail usage
 
 Mail bug reports and suggestions to <asche910@gmail.com>
@@ -89,9 +92,9 @@ func parseArgs(args []string) {
 			os.Exit(1)
 		}
 	case "--listen", "-L":
-		if len(args) > 1 && !strings.HasPrefix(args[1], "-") {
+		if hasNAttributes(args, 1) {
 			fly.CheckPort(args[1])
-			if len(args) > 2 && !strings.HasPrefix(args[2], "-") {
+			if hasNAttributes(args, 2) {
 				fly.CheckPort(args[2])
 				flyClient.Ports = []string{args[1], args[2]}
 				parseArgs(args[3:])
@@ -105,7 +108,7 @@ func parseArgs(args []string) {
 			os.Exit(1)
 		}
 	case "--server", "-S":
-		if len(args) > 1 && !strings.HasPrefix(args[1], "-") {
+		if hasNAttributes(args, 1) {
 			flyClient.ServerAddr = args[1]
 			parseArgs(args[2:])
 		} else {
@@ -113,8 +116,8 @@ func parseArgs(args []string) {
 			printHelp()
 			os.Exit(1)
 		}
-	case "-m", "--method":
-		if len(args) > 1 && !strings.HasPrefix(args[1], "-") {
+	case "--method", "-m":
+		if hasNAttributes(args, 1) {
 			flyClient.Method = args[1]
 			parseArgs(args[2:])
 		} else {
@@ -123,11 +126,22 @@ func parseArgs(args []string) {
 			os.Exit(1)
 		}
 	case "--password", "-P":
-		if len(args) > 1 && !strings.HasPrefix(args[1], "-") {
+		if hasNAttributes(args, 1) {
 			flyClient.Password = args[1]
 			parseArgs(args[2:])
 		} else {
 			fmt.Println("flynet: no password found!")
+			printHelp()
+			os.Exit(1)
+		}
+	case "--pac", "-p":
+		flyClient.PACMode = true
+		parseArgs(args[1:])
+	case "--config", "-C":
+		if hasNAttributes(args, 1) {
+			readConfig(args[1])
+		} else {
+			fmt.Println("flynet: no config file found!")
 			printHelp()
 			os.Exit(1)
 		}
@@ -136,7 +150,7 @@ func parseArgs(args []string) {
 		parseArgs(args[1:])
 	case "--logs", "-l":
 		if len(args) > 1 && !strings.HasPrefix(args[1], "-") {
-			flyClient.LogPath = args[1]
+			fly.SetLogName(args[1])
 		}
 		fly.EnableLog(true)
 		parseArgs(args[1:])
@@ -149,6 +163,22 @@ func parseArgs(args []string) {
 		printHelp()
 		os.Exit(1)
 	}
+}
+
+// judge if the current args option has  n attributes at least.
+// for example:
+// args = []string{"--listen", "1080", "8888"}
+// hasNAttributes(args, 2) will return true
+func hasNAttributes(args []string, n int) bool {
+	if len(args) > n {
+		for i := 1; i <= n; i++ {
+			if strings.HasPrefix(args[i], "-") {
+				return false
+			}
+		}
+		return true
+	}
+	return false
 }
 
 func checkArgs() {
@@ -177,7 +207,7 @@ func readConfig(path string) {
 	conf, err := ini.Load(path)
 	if err != nil {
 		fmt.Println("load config file fail --->", err)
-		fmt.Println("you could refer the example config file: https://github.com/asche910/flynet")
+		fmt.Println("you could refer to the example config file: https://github.com/asche910/flynet")
 		os.Exit(1)
 	}
 	section, err := conf.NewSection("client")
@@ -189,7 +219,7 @@ func readConfig(path string) {
 	serverAddr := getAttr(section, "serverAddr")
 	method := getAttr(section, "method")
 	password := getAttr(section, "password")
-	pacOn := getAttr(section, "pac-on")
+	pacOn := getAttr(section, "pac-mode")
 	verbose := getAttr(section, "verbose")
 	logs := getAttr(section, "log")
 
@@ -212,28 +242,20 @@ func readConfig(path string) {
 
 	fly.CheckPort(port)
 	flyClient.Ports = []string{port}
-
 	flyClient.ServerAddr = serverAddr
-
 	flyClient.Method = method
-
 	flyClient.Password = password
 
 	if pacOn == "true" {
-		 flyClient.PACMode = true
-	}else {
-		flyClient.PACMode = false
+		flyClient.PACMode = true
 	}
 
 	if verbose == "true" {
-		flyClient.Verbose = true
 		fly.EnableDebug(true)
-	}else {
-		flyClient.Verbose = false
 	}
 
 	if logs != "" {
-		flyClient.LogPath = logs
+		fly.SetLogName(logs)
 		fly.EnableLog(true)
 	}
 }

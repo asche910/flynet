@@ -71,15 +71,21 @@ func handleLocalClient(client net.Conn) {
 	}
 }
 
-func Socks5ForClientByTCP(localPort, serverAddr, method, key string) {
+func Socks5ForClientByTCP(localPort, serverAddr, method, key string, pacMode bool) {
 	listener := ListenTCP(localPort)
 
 	cipherEntity := CipherMap[method]
 	if cipherEntity == nil {
 		logger.Println("encrypt method: aes-256-cfb")
-	}else {
+	} else {
 		logger.Println("encrypt method:", method)
 	}
+
+	if pacMode {
+		GetPAC()
+		logger.Printf("pac mode is on, the url is: http://localhost:%s/flynet.pac\n", localPort)
+	}
+
 	for {
 		client, err := listener.Accept()
 		if err != nil {
@@ -127,8 +133,10 @@ func Socks5ForClientByTCP(localPort, serverAddr, method, key string) {
 
 				go RelayTraffic(server, client)
 				RelayTraffic(client, server)
-			}else {
-				handlePACRequest(client, buff[:n], localPort)
+			} else {
+				if pacMode {
+					handlePACRequest(client, buff[:n], localPort)
+				}
 			}
 		}()
 	}
@@ -140,7 +148,7 @@ func Socks5ForServerByTCP(localPort, method, key string) {
 	cipherEntity := CipherMap[method]
 	if cipherEntity == nil {
 		logger.Println("encrypt method: aes-256-cfb")
-	}else {
+	} else {
 		logger.Println("encrypt method:", method)
 	}
 	for {
@@ -294,19 +302,17 @@ func parseSocksRequest(data []byte, n int) (string, string) {
 	return host, port
 }
 
-func handlePACRequest(conn net.Conn, buff []byte, port string)  {
+func handlePACRequest(conn net.Conn, buff []byte, port string) {
 	if bytes.Contains(buff[:], []byte("flynet.pac HTTP")) {
 		fileBuff, size := GetPAC()
 		// replace the socks5 port of pac file with the port user choose
-		fileBuff = bytes.Replace(fileBuff[:size], []byte("SOCKS5 127.0.0.1:1080"), []byte("SOCKS5 127.0.0.1:" + port), 1)
+		fileBuff = bytes.Replace(fileBuff[:size], []byte("SOCKS5 127.0.0.1:1080"), []byte("SOCKS5 127.0.0.1:"+port), 1)
 
 		_, _ = conn.Write([]byte(fmt.Sprintf("HTTP/1.1 200 OK\r\n"+
 			"Content-Type: application/x-ns-proxy-autoconfig\r\n"+
 			"Server: flynet\r\nContent-Length: %d\r\n\r\n", size)))
 		_, _ = conn.Write(fileBuff[:size])
-
-		logger.Printf("pac mode is on, the url is: http://localhost:%s/flynet.pac\n", port)
-	}else {
+	} else {
 		msg := "hello,flynet!"
 		_, _ = conn.Write([]byte(fmt.Sprintf("HTTP/1.1 200 OK\r\n"+
 			"Content-Type: text/html; charset=utf-8\r\n"+
