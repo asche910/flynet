@@ -1,0 +1,34 @@
+
+builds:
+  -
+   binary: client-flynet
+   main: ./cmd/client/client.go
+   goos:
+     - windows
+     - darwin
+     - linux
+     - freebsd
+   goarch:
+     - amd64
+     - 386
+     - arm
+     - mipsle
+  -
+   binary: server-flynet
+   main: ./cmd/server/server.go
+   goos:
+     - windows
+     - darwin
+     - linux
+     - freebsd
+   goarch:
+     - amd64
+     - 386
+     - arm
+     - mipsle
+
+archives:
+  -
+    files:
+      - flynet.conf
+      - README.md
