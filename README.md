@@ -3,11 +3,11 @@
 ## Features
 [flynet](https://github.com/asche910/flynet) Is a command-line tool written in Golang language, currently supported features include：
 
-* [Http proxy](#Http Proxy)
-* [Local Socks5 proxy](#Local Socks5 Proxy)
-* [C/S mode of Socks5 proxy by TCP](#C/S mode of Socks5 proxy by TCP)
-* [C/S mode of Socks5 proxy by UDP](#C/S mode of Socks5 proxy by UDP)
-* [NAT traversal](#NAT traversal)
+* [Http proxy](#Http-Proxy)
+* [Local Socks5 proxy](#Local-Socks5-Proxy)
+* [C/S mode of Socks5 proxy by TCP](#C/S-mode-of-Socks5-proxy-by-TCP)
+* [C/S mode of Socks5 proxy by UDP](#C/S-mode-of-Socks5-proxy-by-UDP)
+* [NAT traversal](#NAT-traversal)
 * ...
 
 The project is currently divided into the client and the sever. The http and local socks5 proxy, both sides of flynet support. The other functions need to be used at both sides.
