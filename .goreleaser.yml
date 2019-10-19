@@ -2,6 +2,7 @@
 builds:
   -
    binary: client-flynet
+   id: client-flynet
    main: ./cmd/client/client.go
    goos:
      - windows
@@ -15,6 +16,7 @@ builds:
      - mipsle
   -
    binary: server-flynet
+   id: server-flynet
    main: ./cmd/server/server.go
    goos:
      - windows
