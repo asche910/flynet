@@ -12,7 +12,7 @@ func ListenTCP(localPort string) net.Listener {
 	if err != nil {
 		logger.Panicln(PortOccupiedInfo(localPort), err.Error())
 	}
-	logger.Printf("listen tcp at: %s\n", localPort)
+	logger.Printf("listen tcp on: %s\n", localPort)
 	return listener
 }
 
@@ -22,7 +22,7 @@ func ListenUDP(localPort string) net.Listener {
 	if err != nil {
 		logger.Panicln(PortOccupiedInfo(localPort), err.Error())
 	}
-	logger.Printf("listen udp at: %s\n", localPort)
+	logger.Printf("listen udp on: %s\n", localPort)
 	return listener
 }
 

@@ -1,35 +1,49 @@
 # flynet 
-## 前言
-> 前段时间做某个项目，由于涉及到tcp/udp方面的知识比较多，于是就索性趁热打铁，写个工具来强化相关知识。另外由于并非十分擅长Golang，所以也顺便再了解下Golang吧。
 
-## 简介
-[flynet](https://github.com/asche910/flynet) 是一款Golang语言编写的命令行工具，目前支持的功能包括：
+## Features
+[flynet](https://github.com/asche910/flynet) Is a command-line tool written in Golang language, currently supported features include：
 
-* Http代理
-* 本地Socks5代理
-* C/S模式的Socks5代理，支持TCP/UDP方式
-* 内网穿透
+* [Http proxy](#Http Proxy)
+* [Local Socks5 proxy](#Local Socks5 Proxy)
+* [C/S mode of Socks5 proxy by TCP](#C/S mode of Socks5 proxy by TCP)
+* [C/S mode of Socks5 proxy by UDP](#C/S mode of Socks5 proxy by UDP)
+* [NAT traversal](#NAT traversal)
 * ...
 
-项目目前分为clien端和sever端，除http、本地socks5代理两端都支持外，其余功能需要两端配合使用。
+The project is currently divided into the client and the sever. The http and local socks5 proxy, both sides of flynet support. The other functions need to be used at both sides.
 
-## 使用方式
-###  安装
-Windows、linux用户可以直接在[Releases页面](https://github.com/asche910/flynet/releases)下载对应的版本即可，其他平台可自行下载源码编译。
+## Getting Started
+###  Installing
+There are two ways to install
 
-Windows中命令行进入到相应目录，```.\win-client.exe ...```或  ```.\win-server.exe ...```
+##### Download from [Releases Page](https://github.com/asche910/flynet/releases)
+Go to the [Releases Page](https://github.com/asche910/flynet/releases), download the corresponding version
 
-Linux中同样的， ```./linux-server ...```或```./linux-client ...```
 
-在下文中皆以```server ...```或```client ...```表示。
+##### Build from source
 
-尝试运行后，如果输出如下信息表示成功：
+```shell 
+go get -u -v github.com/asche910/flynet
+```
+In windows system，```.\client.exe ...```or  ```.\server.exe ...```
+
+and linux system， ```./server ...``` or ```./client ...```
+
+will show like this ```server ...``` or ```client ...``` in the following article
+
+after run this command, it should output some messages like this:
 ```
 Usage: flynet [options]
   -M, --mode        choose which mode to run. the mode must be one of['http', 'socks5',
                     'socks5-tcp', 'socks5-udp', 'forward']
   -L, --listen      choose which port(s) to listen or forward
   -S, --server      the server address client connect to
+  -m, --method      choose a encrypt method, which must be one of ['aes-128-cfb','aes-192-cfb',
+                    'aes-256-cfb', 'aes-128-ctr', 'aes-192-ctr', 'aes-256-ctr', 'rc4-md5',
+                    'rc4-md5-6', 'chacha20', 'chacha20-ietf'], default is 'aes-256-cfb'
+  -P, --password    password of server
+  -p, --pac         having this flag, pac-mode will open
+  -C, --config      read from config file
   -V, --verbose     output detail info
   -l, --log         output detail info to log file
   -H, --help        show detail usage
@@ -38,73 +52,103 @@ Mail bug reports and suggestions to <asche910@gmail.com>
 or github: https://github.com/asche910/flynet
 ```
 
-### Http代理
-http代理直接在本机上开启Http代理，client和server都支持，命令如下：
+### Http Proxy
+
+The http proxy directly opens the Http proxy on this machine. Both the client and the server support it. The commands are as follows:
+
 ```
 server -M http -L 8848 
 ```
-或
+or
 ```
 client -M http -L 8848
 ```
-表示在本机8848端口上开启了Http代理服务，如果没有任何信息输出则表示启动成功，毕竟linux的一大哲学就是：
-> 没有消息就是好消息
+It means that the Http proxy service is enabled on the port of 8848. If there is no output, it means the startup is successful. After all, one of philosophies of linux is:
 
-当然如果还是想看到消息的话，可以在后面加上 ```-V```或```--verbose```参数，这样的话就会输出很多消息了。或者也可以加上```-l```或```--log```参数来启动日志文件，会在运行目录下生成一个 ```flynet.log```文件。
+> No news is good news 
 
-### 本地Socks5代理
-本机上开启socks5代理的话，也是非常简单的，client和server都支持，命令如下：
-```
-server -M socks5  -L 8848
-```
-或
-```
-client -M socks5 -L 8848
-```
-这就表示在本机8848端口上开启了socks5代理，然后Chrome配合SwitchyOmega就可以很好的上网了。
+Of course, if you still want to see some messages, you could run this command with options, like ```-V``` or ```--verbose```, which will output detail message to the terminal.
+and the option ```-l``` or ```--log```will write message to the file named 'flynet.log'. of course you can also indicate the file name after the option
 
-### C/S模式的Socks5代理-TCP
-前面的那个是在本地上的socks5代理，这个则是client和server相互配合的socks5代理，并且中间是以tcp协议传输。用途的话，自由发挥吧。使用方法如下：
+### Local Socks5 Proxy
 
-**服务端**
+It is very simple to start the socks5 proxy on this machine. Both the client and the server support it. The commands are as follows:
+
+```
+server -M socks5  -L 1080
+```
+or
+```
+client -M socks5 -L 1080
+```
+This means that the socks5 proxy is enabled at the port 1080 of the machine, and then Chrome can work well with Switchy Omega.
+
+### C/S mode of Socks5 proxy by TCP
+
+The previous one is the socks5 agent on the local, this one is the socks5 proxy that the client and the server cooperate with each other, and the middle is transmitted by the **TCP** protocol. 
+By using this mode, you can bypass the **GFW** easily. The method of use is as follows:
+
+**Server**
 ```
 server -M socks5-tcp -L 8888
 ```
-**客户端**
+**Client**
 ```
-client -M socks5-tcp -L 8848 -S asche.top:8888
+client -M socks5-tcp -L 1080 -S example:8888
 ```
-这里的例子是假设我服务器域名为 asche.top，然后客户端在8848端口开启了socks5代理，然后流量是以TCP的方式转发到了服务器的8888端口上，交由服务器去请求相应的目标网站，再把请求结果返回给客户端。如果可以，中间流量再进行加密，保证了传输的安全性。
 
 
-### C/S模式的Socks5代理-UDP
-这个和上面tcp那个非常相似，不同的是这个在上面TCP基础上，通过kcp(UDP)来发送和接收数据包。毕竟UDP在某些方面有它自身的优势，而且某些重要的协议主要使用udp传输，比如DNS协议。下面来介绍具体用法：
+The example here is to assume that my server domain name is example.com, then the client opens the socks5 proxy on port 1080, 
+and then the traffic is forwarded to the server's 8888 port by TCP, and the server requests the corresponding target website. Return the result of the request to the client.
+The intermediate traffic is encrypted (default method is "aes-256-cfb") to ensure the security of the transmission.
+If you want, you can add more options, like
+ * ```-P password``` add a password as the key for encryption or decryption
+ * ```-m method```   use different encrypt method to encrypt your traffic
+ * ```-p```  adding this on client side will start **PAC** mode. but you should setting the url as System auto proxy url manually
 
-**服务端**
+If you feel that it is too much trouble to enter a bunch of parameters every time，you can just use ```-C flynet.cnnf``` to load a config file in your current directory
+
+### C/S mode of Socks5 proxy by UDP
+
+This is very similar to the above tcp. The difference is that this is sending and receiving all packets through kcp (UDP) not TCP.
+After all, UDP has its own advantages in some aspects, and some important protocols mainly use udp transmission, such as the DNS protocol.
+One of uses is that you can have free internet access **without authentication** when using **campus-wifi** or **public-wifi**.
+Here's a look at the specific usage:
+
+**Server**
 ```
 server -M socks5-udp -L 53
 ```
-**客户端**
+**Client**
 ```
-client -M socks5-udp -L 8848 -S asche.top:53
+client -M socks5-udp -L 8848 -S example.com:53
 ```
-这里同样以域名asche.top、端口53为例，客户端在8848端口开启了socks5代理，然后所有流量通过udp方式传输到服务端的53端口上，服务端收到后解析请求，然后将所有请求发至目标网站，再将结果以udp方式返回到客户端。同样的是中间传输也进行了加密。
 
+Here also take the domain name example.com and port 53 as examples.The client opens the socks5 proxy on udp port 53, and then all traffic
+ is transmitted to the server port 53 through the udp mode. After receiving the request, the server then requests all requests.
+Send to the target website and return the results to the client in udp mode. The same is that all traffic is encrypted.
 
-### 内网穿透
-> 内网穿透，即NAT穿透，网络连接时术语，计算机是局域网内时，外网与内网的计算机节点需要连接通信，有时就会出现不支持内网穿透。就是说映射端口，能让外网的电脑找到处于内网的电脑，提高下载速度
+### NAT traversal
 
-简单点说就是让外网能够访问到内网中的机器。这里该工具所做的就是将内网的某个端口映射到服务器的某个端口中去，这样通过访问服务器的某个端口就可以间接的访问到内网中的端口了。方法如下：
+> Network address translator traversal is a computer networking technique of establishing and maintaining Internet protocol connections across gateways that implement network address translation (NAT).
+  
+To put it simply, the external network can access the machines in the internal network. What the tool does here is to map a port
+ on the intranet to a port on the server, so that by accessing a port on the server, you can indirectly access the port in the intranet.
+ Methods as below:
 
-**服务端**
+**Server**
 ```
 server -M forward -L 8888 8080
 ```
-**客户端**
+**Client**
 ```
-server -M forward -L 80 -S asche.top:8888
+server -M forward -L 80 -S example.com:8888
 ```
- 同样假设服务器域名为asche.top, 这样所完成的就是将客户端的80端口映射到了服务端的8080端口上，中间的数据传输是通过服务端监听8888来完成的。然后我们访问asche.top:8080看到的内容应该就是客户端80端口上的内容了。
 
-## 结语
-项目目前功能也比较局限，日后应该会加上更多功能。另外地址位于 [flynet](https://github.com/asche910/flynet), 还望大家多多支持！
+Also assume that the server domain name is example.com. The goal is mapping the port 80 of the client to the server port 8080. the middle of the data transmission is done through the server listening 8888. 
+Then we visit example.com:8080 could see the content on the client port 80.
+
+## Conclusion
+
+The current function of the project is relatively limited, and more functions should be added in the future.
+If the project is useful to you, a **star** is best favour for me!
