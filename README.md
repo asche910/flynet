@@ -1,4 +1,14 @@
 # flynet 
+[![release][1]][4]  [![size][2]][5] [![License][3]][6]
+ 
+[1]: https://img.shields.io/github/v/release/asche910/flynet
+[2]: https://img.shields.io/github/repo-size/asche910/flynet
+[3]: https://img.shields.io/github/license/asche910/flynet
+[4]: https://github.com/asche910/flynet/releases
+[5]: https://github.com/asche910/flynet
+[6]: https://github.com/asche910/flynet/blob/master/LICENSE
+
+
 
 ## Features
 [flynet](https://github.com/asche910/flynet) Is a command-line tool written in Golang language, currently supported features include：
