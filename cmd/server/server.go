@@ -57,7 +57,7 @@ func printHelp() {
   -H, --help        show detail usage
 
 Mail bug reports and suggestions to <asche910@gmail.com>
-or github: https://github.com/asche910/fly`)
+or github: https://github.com/asche910/flynet`)
 }
 
 func parseArgs(args []string) {

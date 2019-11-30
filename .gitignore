@@ -1,4 +1,5 @@
 /.idea
+/dist
 /test.go
 /flynet.pac
 /cmd/client/client.exe
