@@ -91,12 +91,12 @@ or
 ```
 client -M socks5 -L 1080
 ```
-This means that the socks5 proxy is enabled at the port 1080 of the machine, and then Chrome can work well with Switchy Omega.
+This means that the socks5 proxy is enabled on the port 1080 of the machine, and then Chrome can work well with **Switchy Omega**.
 
 ### C/S mode of Socks5 proxy by TCP
 
 The previous one is the socks5 agent on the local, this one is the socks5 proxy that the client and the server cooperate with each other, and the middle is transmitted by the **TCP** protocol. 
-By using this mode, you can bypass the **GFW** easily. The method of use is as follows:
+By using this mode, you can bypass the **GFW** easily. The usage is as follows:
 
 **Server**
 ```
@@ -104,11 +104,11 @@ server -M socks5-tcp -L 8888
 ```
 **Client**
 ```
-client -M socks5-tcp -L 1080 -S example:8888
+client -M socks5-tcp -L 1080 -S example.com:8888
 ```
 
 
-The example here is to assume that my server domain name is example.com, then the client opens the socks5 proxy on port 1080, 
+The example here is to assume that my server domain name is example.com ( you can also use ip directly:`-S xxx.xxx.xxx.xxx:8888`), then the client starts the socks5 proxy on port 1080, 
 and then the traffic is forwarded to the server's 8888 port by TCP, and the server requests the corresponding target website. Return the result of the request to the client.
 The intermediate traffic is encrypted (default method is "aes-256-cfb") to ensure the security of the transmission.
 If you want, you can add more options, like
