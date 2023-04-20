@@ -48,7 +48,7 @@ func (conn *Conn) Read(b []byte) (n int, err error) {
 	buff := make([]byte, 1024)
 	n, err = conn.Conn.Read(buff)
 
-	//fmt.Println("before", buff[:n])
+	//logger.Println("before", buff[:n])
 	if n > 0 {
 		b = b[:n]
 		conn.Decrypt(b, buff[:n])

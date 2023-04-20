@@ -3,8 +3,10 @@
 /test.go
 /flynet.pac
 /cmd/client/client.exe
+/cmd/client/client
 /cmd/client/client_linux_amd64
 /cmd/client/auto-build.bat
 /cmd/server/server.exe
+/cmd/server/server
 /cmd/server/server_flynet
 /cmd/server/auto-build.bat

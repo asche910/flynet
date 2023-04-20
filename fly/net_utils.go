@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-// listen tcp port at the localPort
+// ListenTCP listen tcp port at the localPort
 func ListenTCP(localPort string) net.Listener {
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", localPort))
 	if err != nil {
@@ -16,7 +16,7 @@ func ListenTCP(localPort string) net.Listener {
 	return listener
 }
 
-// listen udp port at the localPort
+// ListenUDP listen udp port at the localPort
 func ListenUDP(localPort string) net.Listener {
 	listener, err := net.Listen("udp", fmt.Sprintf(":%s", localPort))
 	if err != nil {
