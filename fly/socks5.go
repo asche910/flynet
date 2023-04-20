@@ -17,10 +17,10 @@ func StartSocks5(port string) {
 	for {
 		client, err := listener.Accept()
 		if err != nil {
-			logger.Println("accept failed!")
+			logger.Println("Accept failed!")
 			continue
 		}
-		logger.Println("client accepted!")
+		logger.Println("Client accepted!")
 
 		go handleLocalClient(client)
 	}
@@ -41,23 +41,35 @@ func handleLocalClient(client net.Conn) {
 			logger.Println("response to client failed!")
 			return
 		}
-		// read the detail request from client
+
+		// read request
 		n, err = client.Read(data[:])
 		if err != nil {
-			logger.Println("read from client failed --->", err)
+			logger.Println("Read from client failed --->", err)
 			return
 		} else if n < 7 {
-			logger.Println("read error of request length --->", data[:n])
+			logger.Println("Read error of request length --->", data[:n])
 			return
 		}
 
 		var host, port = parseSocksRequest(data, n)
-		logger.Printf("start request %s:%s\n", host, port)
+		logger.Printf("Start request %s:%s\n", host, port)
+
+		// 	  		reply to the request
+		//        +----+-----+-------+------+----------+----------+
+		//        |VER | REP |  RSV  | ATYP | BND.ADDR | BND.PORT |
+		//        +----+-----+-------+------+----------+----------+
+		//        | 1  |  1  | X'00' |  1   | Variable |    2     |
+		//        +----+-----+-------+------+----------+----------+
+		//
 
 		// request to the target server
 		server, err := net.Dial("tcp", net.JoinHostPort(host, port))
 		if err != nil {
 			CheckError(err, fmt.Sprintf("request to %s:%s failed!", host, port))
+
+			by := []byte{0x05, 0x04, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+			_, err = client.Write(by)
 			return
 		}
 
@@ -68,6 +80,14 @@ func handleLocalClient(client net.Conn) {
 
 		go io.Copy(server, client)
 		io.Copy(client, server)
+
+		//cipherA := NewCipherInstance("", "")
+		//cipherB := NewCipherInstance("", "")
+		//serverConn := NewConn(server, cipherA)
+		//clientConn := NewConn(client, cipherB)
+		//
+		//go io.Copy(serverConn, clientConn)
+		//io.Copy(clientConn, serverConn)
 	}
 }
 
@@ -76,9 +96,9 @@ func Socks5ForClientByTCP(localPort, serverAddr, method, key string, pacMode boo
 
 	cipherEntity := CipherMap[method]
 	if cipherEntity == nil {
-		logger.Println("encrypt method: aes-256-cfb")
+		logger.Println("Encrypt method: aes-256-cfb")
 	} else {
-		logger.Println("encrypt method:", method)
+		logger.Println("Encrypt method:", method)
 	}
 
 	if pacMode {
@@ -89,33 +109,33 @@ func Socks5ForClientByTCP(localPort, serverAddr, method, key string, pacMode boo
 	for {
 		client, err := listener.Accept()
 		if err != nil {
-			logger.Println("accept failed --->", err)
+			logger.Println("Accept failed:", err)
 			continue
 		}
-		logger.Println("client accepted!")
+		logger.Println("Client accepted!")
 
 		go func() {
 			buff := make([]byte, 1024)
 			n, err := client.Read(buff)
 			if err != nil {
-				logger.Println("read handshake request failed --->", err)
+				logger.Println("Read handshake request failed:", err)
 				return
 			}
 			if buff[0] == 0x05 {
 				if n, err = client.Write([]byte{0x05, 0x00}); err != nil {
-					logger.Println("write handshake response failed --->", err)
+					logger.Println("Write handshake response failed:", err)
 					return
 				}
 
 				// read detail request
 				//if n, err = client.Read(buff); err != nil {
 				if n, err = io.ReadAtLeast(client, buff, 5); err != nil {
-					logger.Println("read client quest failed --->", err)
+					logger.Println("Read client quest failed:", err)
 					return
 				}
 				replyBy := []byte{0x05, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 				if _, err = client.Write(replyBy); err != nil {
-					logger.Println("write 'request success' failed --->", err)
+					logger.Println("Write 'request success' failed:", err)
 					return
 				}
 
@@ -178,6 +198,8 @@ func Socks5ForServerByTCP(localPort, method, key string) {
 			server, err := net.Dial("tcp", net.JoinHostPort(host, port))
 			if err != nil {
 				logger.Println(fmt.Sprintf("Request %s:%s failed:", host, port), err)
+				by := []byte{0x05, 0x04, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+				_, err = conn.Write(by)
 				return
 			}
 			go RelayTraffic(server, conn)

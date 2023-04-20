@@ -16,7 +16,7 @@ func NewConn(con net.Conn, cipher *Cipher) *Conn {
 	}
 }
 
-// dial server and send request addr of client
+// DialWithAddr dial server and send request addr of client
 func DialWithAddr(server, method, key string, addr []byte) *Conn {
 	conn, err := net.Dial("tcp", server)
 	if err != nil {
@@ -25,7 +25,7 @@ func DialWithAddr(server, method, key string, addr []byte) *Conn {
 	}
 	newConn := NewConn(conn, NewCipherInstance(key, method))
 	if _, err := newConn.Write(addr); err != nil {
-		logger.Println("write addr to server failed --->", err)
+		logger.Println("Write addr to server failed --->", err)
 		return nil
 	}
 	return newConn
@@ -39,7 +39,9 @@ func (conn *Conn) Write(b []byte) (n int, err error) {
 		buff = make([]byte, len(b))
 	}
 
+	//logger.Println("Before encrypt: ", len(b))
 	conn.Encrypt(buff, b)
+	//logger.Println("After encrypt: ", len(buff))
 	n, err = conn.Conn.Write(buff)
 	return
 }
