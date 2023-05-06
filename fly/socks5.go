@@ -3,6 +3,7 @@ package fly
 import (
 	"bytes"
 	"crypto/sha1"
+	"encoding/binary"
 	"fmt"
 	"github.com/xtaci/kcp-go"
 	"golang.org/x/crypto/pbkdf2"
@@ -11,6 +12,10 @@ import (
 	"strconv"
 	"strings"
 )
+
+//
+// https://datatracker.ietf.org/doc/html/rfc1928
+//
 
 func StartSocks5(port string) {
 	listener := ListenTCP(port)
@@ -78,6 +83,18 @@ func handleLocalClient(client net.Conn) {
 		_, err = client.Write(by)
 		CheckError(err, "response 'request success' to client failed!")
 
+		//var relayBuf bytes.Buffer
+		//outPR, outPW := io.Pipe()
+		//inPR, inPW := io.Pipe()
+		//
+		//go RelayTrafficWithFlag(outPW, client, "C->M")
+		//go RelayTrafficWithFlag(server, outPR, "M->S")
+		//go RelayTrafficWithFlag(inPW, server, "S->M")
+		//RelayTrafficWithFlag(client, inPR, "M->C")
+
+		//go RelayTrafficWithFlag(server, client, "C->S")
+		//RelayTrafficWithFlag(client, server, "S->C")
+
 		go io.Copy(server, client)
 		io.Copy(client, server)
 
@@ -121,21 +138,31 @@ func Socks5ForClientByTCP(localPort, serverAddr, method, key string, pacMode boo
 				logger.Println("Read handshake request failed:", err)
 				return
 			}
+			// 							client hello
+			//                   +----+----------+----------+
+			//                   |VER | NMETHODS | METHODS  |
+			//                   +----+----------+----------+
+			//                   | 1  |    1     | 1 to 255 |
+			//                   +----+----------+----------+
+			//
 			if buff[0] == 0x05 {
+				// accept socks5 connect
 				if n, err = client.Write([]byte{0x05, 0x00}); err != nil {
 					logger.Println("Write handshake response failed:", err)
+					_ = client.Close()
 					return
 				}
 
-				// read detail request
-				//if n, err = client.Read(buff); err != nil {
+				// read  request
 				if n, err = io.ReadAtLeast(client, buff, 5); err != nil {
 					logger.Println("Read client quest failed:", err)
 					return
 				}
+				// reply ok
 				replyBy := []byte{0x05, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 				if _, err = client.Write(replyBy); err != nil {
-					logger.Println("Write 'request success' failed:", err)
+					logger.Println("Reply request failed:", err)
+					_ = client.Close()
 					return
 				}
 
@@ -146,13 +173,17 @@ func Socks5ForClientByTCP(localPort, serverAddr, method, key string, pacMode boo
 				//        | 1  |  1  | X'00' |  1   | Variable |    2     |
 				//        +----+-----+-------+------+----------+----------+
 				//
-				server := DialWithAddr(serverAddr, method, key, buff[:n])
-				if server == nil {
+				serverConn := DialWithAddr(serverAddr, method, key, buff[:n])
+				if serverConn == nil {
+					_ = client.Close()
 					return
 				}
 
-				go RelayTraffic(server, client)
-				RelayTraffic(client, server)
+				go RelayTrafficAndEncrypt(serverConn, client, "C->M")
+				RelayTrafficAndDecrypt(client, serverConn, "M->C")
+
+				//go io.Copy(server, client)
+				//io.Copy(client, server)
 			} else {
 				if pacMode {
 					handlePACRequest(client, buff[:n], localPort)
@@ -190,20 +221,46 @@ func Socks5ForServerByTCP(localPort, method, key string) {
 				return
 			}
 
-			host, port := parseSocksRequest(buff[:n], n)
-			//logger.Printf("target server ------\n%s:%s\n------\n%d\n+++++++\n", host, port, buff[:n])
+			var host, port string
+			var reqLen int
+			reqLen = int(binary.BigEndian.Uint16(buff[:2]))
+			decryptBuff := conn.Cipher.DecryptAndGet(buff[2 : 2+reqLen])
+
+			fmt.Println(buff[:n])
+			fmt.Println(decryptBuff)
+			fmt.Println(reqLen, n)
+
+			if reqLen+2 == n {
+				host, port = parseSocksRequest(decryptBuff, n)
+			} else if reqLen+2 < n {
+				host, port = parseSocksRequest(decryptBuff, n)
+				//isOver = true
+				//buff = buff[reqLen+2:]
+
+				fmt.Println("before write pipe")
+				n, err := conn.BufPipe.Write(buff[2+reqLen : n])
+				fmt.Println("after write pipe")
+
+				if err != nil {
+					logger.Println("PipeWriter write", n, err)
+					return
+				}
+			}
+
 			logger.Printf("Request ---> %s:%s\n", host, port)
 
 			// dial the target server
 			server, err := net.Dial("tcp", net.JoinHostPort(host, port))
 			if err != nil {
 				logger.Println(fmt.Sprintf("Request %s:%s failed:", host, port), err)
-				by := []byte{0x05, 0x04, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
-				_, err = conn.Write(by)
+				_ = conn.Close()
 				return
 			}
-			go RelayTraffic(server, conn)
-			RelayTraffic(conn, server)
+			go RelayTrafficAndDecrypt(server, conn, "M->S")
+			RelayTrafficAndEncrypt(conn, server, "S->M")
+
+			//go io.Copy(server, conn)
+			//io.Copy(conn, server)
 		}()
 	}
 }
@@ -310,6 +367,7 @@ func Socks5ForServerByUDP(localPort string) {
 //	+----+-----+-------+------+----------+----------+
 func parseSocksRequest(data []byte, n int) (string, string) {
 	// TODO sometimes there are some nums, such as '22 3 1 2 0 1 0 1 252...' after port. why?
+	fmt.Println("start parse host", data)
 	var host, port string
 	var p1, p2 byte
 	switch data[3] {

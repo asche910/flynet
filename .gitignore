@@ -10,3 +10,7 @@
 /cmd/server/server
 /cmd/server/server_flynet
 /cmd/server/auto-build.bat
+
+/cmd/server/build.sh
+
+/.DS_Store

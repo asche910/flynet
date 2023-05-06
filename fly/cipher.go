@@ -59,8 +59,20 @@ func (cipher *Cipher) Encrypt(dst, src []byte) {
 	cipher.encoder.XORKeyStream(dst, src)
 }
 
+func (cipher *Cipher) EncryptAndGet(src []byte) (dst []byte) {
+	dst = make([]byte, len(src))
+	cipher.encoder.XORKeyStream(dst, src)
+	return
+}
+
 func (cipher *Cipher) Decrypt(dst, src []byte) {
 	cipher.decoder.XORKeyStream(dst, src)
+}
+
+func (cipher *Cipher) DecryptAndGet(src []byte) (dst []byte) {
+	dst = make([]byte, len(src))
+	cipher.decoder.XORKeyStream(dst, src)
+	return
 }
 
 // a detail encrypt or decrypt method
