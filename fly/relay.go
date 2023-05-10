@@ -117,6 +117,7 @@ func RelayTrafficAndDecrypt(dst net.Conn, conn *Conn, flag string) {
 		var decryptBuff []byte
 
 		for {
+			logger.Println("Start read header...")
 			n, err := io.ReadFull(conn.BufPipe, sizeBuff)
 			if err != nil {
 				logger.Println("ReadFull size error ", n, err)
@@ -135,7 +136,7 @@ func RelayTrafficAndDecrypt(dst net.Conn, conn *Conn, flag string) {
 			}
 			decryptBuff = make([]byte, buffSize)
 			conn.Cipher.Decrypt(decryptBuff, encryptBuff)
-			logger.Println("Read decrypt body ", string(decryptBuff))
+			logger.Printf("Read decrypt body: \n-------------- \n%s \n-------------- \n", string(decryptBuff))
 
 			n, err = dst.Write(decryptBuff)
 			if err != nil {
@@ -163,7 +164,9 @@ func RelayTrafficAndDecrypt(dst net.Conn, conn *Conn, flag string) {
 			break
 		}
 		//go func() {
+		logger.Println(flag, " start write pipe...")
 		n, err = conn.BufPipe.Write(buff[:n])
+		logger.Println(flag, " write pipe ", n, "size ", conn.BufPipe.Size())
 		if err != nil {
 			logger.Println(flag, "RelayTraffic write pipe failed:", err)
 		}

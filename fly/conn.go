@@ -19,7 +19,7 @@ func NewConn(con net.Conn, cipher *Cipher) *Conn {
 	return &Conn{
 		Conn:       con,
 		Cipher:     cipher,
-		BufPipe:    NewBufferedPipe(4096),
+		BufPipe:    NewBufferedPipe(8192),
 		PipeReader: pr,
 		PipeWriter: pw,
 	}
