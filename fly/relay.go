@@ -81,19 +81,20 @@ func RelayTrafficWithFlag(dst *Conn, src net.Conn, flag string) {
 		n, err := src.Read(buff)
 		if n > 0 {
 			logger.Printf("%s write: \n-------------- \n%s \n-------------- \n ", flag, string(buff[:n]))
-			m, err := dst.Write(buff[:n]) // m = n + 2
+			m, err := dst.Write(buff[:n]) // m = n + 4
 			if err != nil {
-				logger.Println(flag, "RelayTraffic write failed:", err)
+				logger.Println(flag, "relayTraffic write failed", err)
 				break
 			}
-			if m != n+2 { // addition header size
-				logger.Println(flag, "RelayTraffic short write:", err)
+			if m != n+4 { // addition header size
+				logger.Println(flag, "relayTraffic short write:", err)
 				break
 			}
+			logger.Println(flag, "write", m)
 		}
 		if err != nil {
 			if err != io.EOF {
-				logger.Println(flag, "RelayTraffic read failed:", err)
+				logger.Println(flag, "relayTraffic read failed:", err)
 			} else {
 				logger.Println(flag, "read EOF", n, err)
 			}
@@ -111,38 +112,46 @@ func RelayTrafficAndDecrypt(dst net.Conn, conn *Conn, flag string) {
 
 	// read pipeline
 	go func() {
-		sizeBuff := make([]byte, 2)
+		headerBuff := make([]byte, 4)
 		var buffSize int
 		var encryptBuff []byte
 		var decryptBuff []byte
 
 		for {
-			logger.Println("Start read header...")
-			n, err := io.ReadFull(conn.BufPipe, sizeBuff)
+			logger.Println(flag, "start read header...")
+			n, err := io.ReadFull(conn.BufPipe, headerBuff)
 			if err != nil {
-				logger.Println("ReadFull size error ", n, err)
+				logger.Println(flag, "readFull size error ", n, err)
 				break
 			}
-			//binary.BigEndian.PutUint16(sizeBuff[:2], uint16(buffSize))
-			buffSize = int(binary.BigEndian.Uint16(sizeBuff))
-			logger.Println("Read header size", buffSize)
-			logger.Println("Current pipe size", conn.BufPipe.Size())
+			//binary.BigEndian.PutUint16(headerBuff[:2], uint16(buffSize))
+			buffSize = int(binary.BigEndian.Uint16(headerBuff[2:4]))
+			logger.Println(flag, "read header size", buffSize)
+			logger.Println(flag, "current pipe size", conn.BufPipe.Size())
+
+			// Check magic number
+			if headerBuff[0] != 255 || headerBuff[1] != 255 {
+				logger.Errorln(flag, "header error !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ", headerBuff)
+				// TODO other side stop
+				break
+			}
 
 			encryptBuff = make([]byte, buffSize)
 			n, err = io.ReadFull(conn.BufPipe, encryptBuff)
 			if err != nil {
-				logger.Println("ReadFull data error ", n, err)
+				logger.Println(flag, "readFull data error ", n, err)
 				break
 			}
 			decryptBuff = make([]byte, buffSize)
 			conn.Cipher.Decrypt(decryptBuff, encryptBuff)
-			logger.Printf("Read decrypt body: \n-------------- \n%s \n-------------- \n", string(decryptBuff))
+			logger.Printf("%s read decrypt body: \n-------------- \n%s \n-------------- \n", flag, string(decryptBuff))
 
 			n, err = dst.Write(decryptBuff)
 			if err != nil {
-				logger.Println("Write dst error ", n, err)
+				logger.Println(flag, "write dst error ", n, err)
 				break
 			}
+			logger.Println(flag, "write dst", n)
 		}
 	}()
 
@@ -156,7 +165,7 @@ func RelayTrafficAndDecrypt(dst net.Conn, conn *Conn, flag string) {
 		}
 		if err != nil {
 			if err != io.EOF {
-				logger.Println(flag, "RelayTraffic read failed:", err)
+				logger.Println(flag, "relayTraffic read failed:", err)
 			} else {
 				logger.Println(flag, "read EOF", n, err)
 			}

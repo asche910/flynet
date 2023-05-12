@@ -4,6 +4,8 @@ go 1.19
 
 require (
 	github.com/aead/chacha20 v0.0.0-20180709150244-8b13a72661da
+	github.com/antonfisher/nested-logrus-formatter v1.3.1
+	github.com/sirupsen/logrus v1.9.0
 	github.com/xtaci/kcp-go v5.4.20+incompatible
 	golang.org/x/crypto v0.8.0
 	gopkg.in/ini.v1 v1.67.0

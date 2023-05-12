@@ -64,3 +64,19 @@ func TestRC4MD5(t *testing.T) {
 	testCipher(t, "rc4-md5")
 	//testCipher(t, "rc4-md5-6")
 }
+
+func Test(t *testing.T) {
+	by := []byte{'h', 'e', 'l', 'l', 'o'}
+	newBy := by[2:4]
+	fmt.Println(len(by), cap(by))
+	fmt.Println(len(newBy), cap(newBy))
+
+	b := make([]byte, 0, 10)
+	fmt.Println(b)
+	fmt.Println(len(b), cap(b))
+	//b[7] = 7
+	copy(b[3:3+len(by)], by)
+	fmt.Println(b[0:10])
+	fmt.Println(len(b), cap(b))
+
+}

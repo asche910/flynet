@@ -1,8 +1,10 @@
 package fly
 
 import (
+	nested "github.com/antonfisher/nested-logrus-formatter"
+	log "github.com/sirupsen/logrus"
 	"io"
-	"log"
+	//"log"
 	"os"
 )
 
@@ -10,7 +12,7 @@ var (
 	logFlag   = false
 	debugFlag = false
 	logger    *log.Logger
-	logName = "flynet.log"
+	logName   = "flynet.log"
 )
 
 func InitLog() {
@@ -26,7 +28,7 @@ func EnableDebug(flag bool) {
 }
 
 // set log file name, which can include absolute path
-func SetLogName(name string)  {
+func SetLogName(name string) {
 	logName = name
 }
 
@@ -57,6 +59,14 @@ func GetLogger() *log.Logger {
 
 	targetWriter := io.MultiWriter(writers...)
 	// cancel log.Lshortfile
-	logs := log.New(targetWriter, "", log.Ldate|log.Ltime)
+	logs := log.New()
+	logs.Out = targetWriter
+	//logs := log.New(targetWriter, "", log.Ldate|log.Ltime)
+
+	logs.SetLevel(log.InfoLevel)
+	logs.SetFormatter(&nested.Formatter{
+		HideKeys:    true,
+		FieldsOrder: []string{"component", "category"},
+	})
 	return logs
 }

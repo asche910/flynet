@@ -12,7 +12,7 @@ type BufferedPipe struct {
 
 func NewBufferedPipe(size int) *BufferedPipe {
 	p := &BufferedPipe{
-		buf:   make([]byte, 0, size),
+		buf:   make([]byte, size),
 		start: 0,
 		size:  0,
 	}
@@ -24,7 +24,7 @@ func (p *BufferedPipe) Write(b []byte) (int, error) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 	for p.start+p.size+len(b) > cap(p.buf) {
-		logger.Printf("Write pipe wait --- > len(buf):%d, len(b):%d, cap(buf):%d \n", len(p.buf), len(b), cap(p.buf))
+		logger.Printf("Write pipe wait --- > start:%d, size:%d, len(b):%d, cap(buf):%d \n", p.start, p.size, len(b), cap(p.buf))
 		p.cond.Wait()
 	}
 	//p.buf = append(p.buf, b...)
@@ -46,14 +46,15 @@ func (p *BufferedPipe) Read(b []byte) (readSize int, err error) {
 		p.start = 0
 		p.size = 0
 	} else {
-		copy(b[:], p.buf[p.start:p.start+len(b)])
+		copy(b, p.buf[p.start:p.start+len(b)])
 		readSize = len(b)
 		p.start += readSize
 		p.size -= readSize
 		if p.start+p.size > cap(p.buf)/2 {
-			newBuf := make([]byte, 0, cap(p.buf))
-			copy(newBuf[0:], p.buf[p.start:p.start+p.size])
+			newBuf := make([]byte, cap(p.buf))
+			copy(newBuf[0:p.size], p.buf[p.start:p.start+p.size])
 			p.buf = newBuf
+			p.start = 0
 		}
 	}
 

@@ -220,25 +220,30 @@ func Socks5ForServerByTCP(localPort, method, key string) {
 				logger.Println("Read error of request length:", buff[:n])
 				return
 			}
+			// Check magic num
+			if buff[0] != 255 || buff[1] != 255 {
+				logger.Println("Request decrypt error", buff)
+				return
+			}
 
 			var host, port string
 			var reqLen int
-			reqLen = int(binary.BigEndian.Uint16(buff[:2]))
-			decryptBuff := conn.Cipher.DecryptAndGet(buff[2 : 2+reqLen])
+			reqLen = int(binary.BigEndian.Uint16(buff[2:4]))
+			decryptBuff := conn.Cipher.DecryptAndGet(buff[4 : 4+reqLen])
 
-			fmt.Println(buff[:n])
+			//fmt.Println(buff[:n])
 			fmt.Println(decryptBuff)
-			fmt.Println(reqLen, n)
+			fmt.Printf("%d / %d \n", reqLen, n)
 
-			if reqLen+2 == n {
+			if reqLen+4 == n {
 				host, port = parseSocksRequest(decryptBuff, n)
-			} else if reqLen+2 < n {
+			} else if reqLen+4 < n {
 				host, port = parseSocksRequest(decryptBuff, n)
 				//isOver = true
 				//buff = buff[reqLen+2:]
 
 				fmt.Println("before write pipe")
-				n, err := conn.BufPipe.Write(buff[2+reqLen : n])
+				n, err := conn.BufPipe.Write(buff[4+reqLen : n])
 				fmt.Println("after write pipe")
 
 				if err != nil {
