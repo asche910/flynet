@@ -198,15 +198,15 @@ func Socks5ForServerByTCP(localPort, method, key string) {
 
 	cipherEntity := CipherMap[method]
 	if cipherEntity == nil {
-		logger.Println("Encrypt method: aes-256-cfb")
+		logger.Infoln("Encrypt method: aes-256-cfb")
 	} else {
-		logger.Println("Encrypt method:", method)
+		logger.Infoln("Encrypt method:", method)
 	}
 	for {
 		//logger.Println("waiting...")
 		client, err := listener.Accept()
 		if err != nil {
-			logger.Println("Accept failed:", err)
+			logger.Errorln("Accept failed:", err)
 			continue
 		}
 		go func() {
@@ -214,15 +214,15 @@ func Socks5ForServerByTCP(localPort, method, key string) {
 			conn := NewConn(client, NewCipherInstance(key, method))
 			n, err := conn.Read(buff)
 			if err != nil {
-				logger.Println("Parse target address failed:", err)
+				logger.Errorln("Parse target address failed:", err)
 				return
 			} else if n < 7 {
-				logger.Println("Read error of request length:", buff[:n])
+				logger.Errorln("Read error of request length:", buff[:n])
 				return
 			}
 			// Check magic num
 			if buff[0] != 255 || buff[1] != 255 {
-				logger.Println("Request decrypt error", buff)
+				logger.Errorln("Request decrypt error", buff)
 				return
 			}
 
@@ -232,8 +232,8 @@ func Socks5ForServerByTCP(localPort, method, key string) {
 			decryptBuff := conn.Cipher.DecryptAndGet(buff[4 : 4+reqLen])
 
 			//fmt.Println(buff[:n])
-			fmt.Println(decryptBuff)
-			fmt.Printf("%d / %d \n", reqLen, n)
+			logger.Debugln(decryptBuff)
+			logger.Debugf("%d / %d \n", reqLen, n)
 
 			if reqLen+4 == n {
 				host, port = parseSocksRequest(decryptBuff, n)
@@ -242,17 +242,17 @@ func Socks5ForServerByTCP(localPort, method, key string) {
 				//isOver = true
 				//buff = buff[reqLen+2:]
 
-				fmt.Println("before write pipe")
+				logger.Debugln("before write pipe")
 				n, err := conn.BufPipe.Write(buff[4+reqLen : n])
-				fmt.Println("after write pipe")
+				logger.Debugln("after write pipe")
 
 				if err != nil {
-					logger.Println("PipeWriter write", n, err)
+					logger.Errorln("PipeWriter write", n, err)
 					return
 				}
 			}
 
-			logger.Printf("Request ---> %s:%s\n", host, port)
+			logger.Infof("Request ---> %s:%s\n", host, port)
 
 			// dial the target server
 			server, err := net.Dial("tcp", net.JoinHostPort(host, port))
@@ -372,7 +372,7 @@ func Socks5ForServerByUDP(localPort string) {
 //	+----+-----+-------+------+----------+----------+
 func parseSocksRequest(data []byte, n int) (string, string) {
 	// TODO sometimes there are some nums, such as '22 3 1 2 0 1 0 1 252...' after port. why?
-	fmt.Println("start parse host", data)
+	logger.Debugln("start parse host", data)
 	var host, port string
 	var p1, p2 byte
 	switch data[3] {

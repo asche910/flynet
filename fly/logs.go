@@ -46,27 +46,37 @@ func GetLogger() *log.Logger {
 		}
 	}
 	var writers []io.Writer
-	if logFlag && debugFlag {
 
-		writers = []io.Writer{f, os.Stdout}
-	} else if !logFlag && !debugFlag {
-		writers = []io.Writer{}
-	} else if debugFlag {
-		writers = []io.Writer{os.Stdout}
-	} else {
-		writers = []io.Writer{f}
+	//if logFlag && debugFlag {
+	//	writers = []io.Writer{f, os.Stdout}
+	//} else if !logFlag && !debugFlag {
+	//	writers = []io.Writer{}
+	//} else if debugFlag {
+	//	writers = []io.Writer{os.Stdout}
+	//} else {
+	//	writers = []io.Writer{f}
+	//}
+
+	if logFlag {
+		writers = append(writers, f)
 	}
-
+	if debugFlag {
+		writers = append(writers, os.Stdout)
+	}
 	targetWriter := io.MultiWriter(writers...)
-	// cancel log.Lshortfile
+
 	logs := log.New()
 	logs.Out = targetWriter
 	//logs := log.New(targetWriter, "", log.Ldate|log.Ltime)
 
-	logs.SetLevel(log.InfoLevel)
+	//logs.SetLevel(log.InfoLevel)
+	logs.SetLevel(log.DebugLevel)
 	logs.SetFormatter(&nested.Formatter{
-		HideKeys:    true,
-		FieldsOrder: []string{"component", "category"},
+		HideKeys:        true,
+		FieldsOrder:     []string{"component", "category"},
+		TimestampFormat: "2006-01-02 15:04:05",
 	})
+
+	//logs.SetReportCaller(true)
 	return logs
 }

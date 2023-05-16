@@ -5,6 +5,9 @@ import (
 	"net"
 )
 
+// DataOffset refer to encrypted Data Package
+const DataOffset = 4
+
 type Conn struct {
 	Conn    net.Conn
 	Cipher  *Cipher
@@ -58,7 +61,7 @@ func DialWithAddr(server, method, key string, addr []byte) *Conn {
 func (conn *Conn) Write(b []byte) (n int, err error) {
 	dataSize := len(b)
 	var buff []byte
-	buff = make([]byte, dataSize+4)
+	buff = make([]byte, dataSize+DataOffset)
 	// Magic Number
 	buff[0] = 255
 	buff[1] = 255
@@ -67,7 +70,7 @@ func (conn *Conn) Write(b []byte) (n int, err error) {
 
 	//logger.Println("Before encrypt: ", b[:])
 	//logger.Println("before", b)
-	conn.Cipher.Encrypt(buff[4:], b)
+	conn.Cipher.Encrypt(buff[DataOffset:], b)
 	//logger.Println("after", buff)
 	//logger.Println("After encrypt: ", len(buff))
 	//n, err = conn.Conn.Write(b)

@@ -77,33 +77,34 @@ func RelayTrafficWithFlag(dst *Conn, src net.Conn, flag string) {
 	//}
 
 	for {
-		logger.Println(flag, "start read...")
+		logger.Debugln(flag, "start read...")
 		n, err := src.Read(buff)
-		if n > 0 {
-			logger.Printf("%s write: \n-------------- \n%s \n-------------- \n ", flag, string(buff[:n]))
-			m, err := dst.Write(buff[:n]) // m = n + 4
-			if err != nil {
-				logger.Println(flag, "relayTraffic write failed", err)
-				break
-			}
-			if m != n+4 { // addition header size
-				logger.Println(flag, "relayTraffic short write:", err)
-				break
-			}
-			logger.Println(flag, "write", m)
-		}
 		if err != nil {
 			if err != io.EOF {
-				logger.Println(flag, "relayTraffic read failed:", err)
+				logger.Errorln(flag, "relayTraffic read failed:", err)
 			} else {
-				logger.Println(flag, "read EOF", n, err)
+				logger.Debugln(flag, "read EOF", n, err)
 			}
 			_ = dst.Close()
 			break
 		}
+		if n > 0 {
+			logger.Debugf("%s write: \n-------------- \n%s \n-------------- \n ", flag, string(buff[:n]))
+			m, err := dst.Write(buff[:n]) // m = n + 4
+			if err != nil {
+				logger.Errorln(flag, "relayTraffic write failed", err)
+				break
+			}
+			if m != n+DataOffset { // addition header size
+				logger.Errorln(flag, "relayTraffic short write:", err)
+				break
+			}
+			logger.Debugln(flag, "write", m)
+		}
+
 		//logger.Println(flag, "write one")
 	}
-	logger.Println(flag, "write done")
+	logger.Debugln(flag, "write done")
 }
 
 func RelayTrafficAndDecrypt(dst net.Conn, conn *Conn, flag string) {
@@ -112,22 +113,22 @@ func RelayTrafficAndDecrypt(dst net.Conn, conn *Conn, flag string) {
 
 	// read pipeline
 	go func() {
-		headerBuff := make([]byte, 4)
+		headerBuff := make([]byte, DataOffset)
 		var buffSize int
 		var encryptBuff []byte
 		var decryptBuff []byte
 
 		for {
-			logger.Println(flag, "start read header...")
+			logger.Debugln(flag, "start read header...")
 			n, err := io.ReadFull(conn.BufPipe, headerBuff)
 			if err != nil {
-				logger.Println(flag, "readFull size error ", n, err)
+				logger.Errorln(flag, "readFull size error ", n, err)
 				break
 			}
 			//binary.BigEndian.PutUint16(headerBuff[:2], uint16(buffSize))
-			buffSize = int(binary.BigEndian.Uint16(headerBuff[2:4]))
-			logger.Println(flag, "read header size", buffSize)
-			logger.Println(flag, "current pipe size", conn.BufPipe.Size())
+			buffSize = int(binary.BigEndian.Uint16(headerBuff[2:DataOffset]))
+			logger.Debugln(flag, "read header size", buffSize)
+			logger.Debugln(flag, "current pipe size", conn.BufPipe.Size())
 
 			// Check magic number
 			if headerBuff[0] != 255 || headerBuff[1] != 255 {
@@ -139,45 +140,45 @@ func RelayTrafficAndDecrypt(dst net.Conn, conn *Conn, flag string) {
 			encryptBuff = make([]byte, buffSize)
 			n, err = io.ReadFull(conn.BufPipe, encryptBuff)
 			if err != nil {
-				logger.Println(flag, "readFull data error ", n, err)
+				logger.Errorln(flag, "readFull data error ", n, err)
 				break
 			}
 			decryptBuff = make([]byte, buffSize)
 			conn.Cipher.Decrypt(decryptBuff, encryptBuff)
-			logger.Printf("%s read decrypt body: \n-------------- \n%s \n-------------- \n", flag, string(decryptBuff))
+			logger.Debugf("%s read decrypt body: \n-------------- \n%s \n-------------- \n", flag, string(decryptBuff))
 
 			n, err = dst.Write(decryptBuff)
 			if err != nil {
-				logger.Println(flag, "write dst error ", n, err)
+				logger.Errorln(flag, "write dst error ", n, err)
 				break
 			}
-			logger.Println(flag, "write dst", n)
+			logger.Debugln(flag, "write dst", n)
 		}
 	}()
 
 	//io.ReadFull()
 	//flag := "M->S"
 	for {
-		logger.Println(flag, "start read...")
+		logger.Debugln(flag, "start read...")
 		n, err := conn.Read(buff)
 		if n > 0 {
 			//logger.Printf("%s write: \n-------------- \n%s \n-------------- \n ", flag, string(buff[:n]))
 		}
 		if err != nil {
 			if err != io.EOF {
-				logger.Println(flag, "relayTraffic read failed:", err)
+				logger.Errorln(flag, "relayTraffic read failed:", err)
 			} else {
-				logger.Println(flag, "read EOF", n, err)
+				logger.Debugln(flag, "read EOF", n, err)
 			}
 			_ = dst.Close()
 			break
 		}
 		//go func() {
-		logger.Println(flag, " start write pipe...")
+		logger.Debugln(flag, " start write pipe...")
 		n, err = conn.BufPipe.Write(buff[:n])
-		logger.Println(flag, " write pipe ", n, "size ", conn.BufPipe.Size())
+		logger.Debugln(flag, " write pipe ", n, "size ", conn.BufPipe.Size())
 		if err != nil {
-			logger.Println(flag, "RelayTraffic write pipe failed:", err)
+			logger.Errorln(flag, "RelayTraffic write pipe failed:", err)
 		}
 		//}()
 
