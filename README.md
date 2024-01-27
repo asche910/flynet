@@ -96,7 +96,7 @@ This means that the socks5 proxy is enabled on the port 1080 of the machine, and
 ### C/S mode of Socks5 proxy by TCP
 
 The previous one is the socks5 agent on the local, this one is the socks5 proxy that the client and the server cooperate with each other, and the middle is transmitted by the **TCP** protocol. 
-By using this mode, you can bypass the **GFW** easily. The usage is as follows:
+The usage is as follows:
 
 **Server**
 ```
